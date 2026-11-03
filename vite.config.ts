@@ -12,4 +12,9 @@ export default defineConfig({
     // nitro/vite builds from this
     server: { entry: "server" },
   },
+  vite: {
+    // Pre-bundle motion so Vite never re-optimizes deps mid-session, which loads a
+    // second React copy in the browser ("Cannot read properties of null (reading 'useState')").
+    optimizeDeps: { include: ["motion/react"] },
+  },
 });
