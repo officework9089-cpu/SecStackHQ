@@ -68,21 +68,22 @@ export function HeroVisual() {
           ))}
         </div>
 
-        {/* center mark */}
-        <div className="absolute inset-0 grid place-items-center [transform:translateZ(170px)_translateY(-4%)]">
-          <FloatingElement distance={10}>
-            <div className="bg-tile shadow-glow-lg grid size-28 place-items-center rounded-[1.75rem] sm:size-36">
-              <img
-                src={markAsset.url}
-                alt="SecStackHQ emblem"
-                width={144}
-                height={144}
-                className="size-24 object-contain sm:size-32"
-              />
-            </div>
-          </FloatingElement>
-        </div>
       </motion.div>
+
+      {/* center mark (kept outside the 3D context so plates never occlude it) */}
+      <div className="pointer-events-none absolute inset-0 z-10 grid -translate-y-[6%] place-items-center">
+        <FloatingElement distance={10}>
+          <div className="bg-tile shadow-glow-lg grid size-24 place-items-center rounded-[1.5rem] sm:size-32">
+            <img
+              src={markAsset.url}
+              alt="SecStackHQ emblem"
+              width={128}
+              height={128}
+              className="size-20 object-contain sm:size-28"
+            />
+          </div>
+        </FloatingElement>
+      </div>
 
       {/* floating chips */}
       {chips.map((c, i) => (
