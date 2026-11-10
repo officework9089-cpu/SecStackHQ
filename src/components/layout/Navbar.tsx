@@ -7,7 +7,7 @@ import { MagneticButton } from "@/components/motion";
 import { Button } from "@/components/ui/button";
 import { navLinks } from "@/data/site";
 import { scrollToSection, useActiveSection } from "@/hooks/use-active-section";
-import { cn } from "@/lib/utils";
+import { cn } from "@/lib/utils/calculator";
 
 const ids = navLinks.map((l) => l.id);
 

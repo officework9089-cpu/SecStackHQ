@@ -5,7 +5,7 @@ import { useCallback, useEffect, useState } from "react";
 import { Section, SectionHeading } from "@/components/common/SectionHeading";
 import { GradientText } from "@/components/motion";
 import { testimonials } from "@/data/site";
-import { cn } from "@/lib/utils";
+import { cn } from "@/lib/utils/calculator";
 
 export function Testimonials() {
   const [[index, dir], setState] = useState<[number, number]>([0, 1]);

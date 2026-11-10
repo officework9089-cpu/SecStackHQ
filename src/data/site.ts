@@ -29,9 +29,9 @@ import socialImg from "@/assets/project-social.jpg";
 export const brand = {
   name: "SecStackHQ",
   tagline: "DEVELOP • SECURE • GROW",
-  email: "hello@secstackhq.com",
-  phone: "+92 300 0000000",
-  whatsapp: "923000000000",
+  email: "info@secstackhq.com",
+  phone: "+92 3252249291",
+  whatsapp: "923252249291",
   location: "Karachi, Pakistan · Serving clients worldwide",
 };
 

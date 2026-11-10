@@ -1,5 +1,5 @@
 import { RevealOnScroll } from "@/components/motion";
-import { cn } from "@/lib/utils";
+import { cn } from "@/lib/utils/calculator";
 import type { ReactNode } from "react";
 
 export function Eyebrow({ children }: { children: ReactNode }) {
@@ -33,7 +33,7 @@ export function SectionHeading({
       )}
     >
       <Eyebrow>{eyebrow}</Eyebrow>
-      <h2 className="text-h2 font-bold">{title}</h2>
+      <h2 className="text-4xl font-bold">{title}</h2>
       {description && <p className="text-lead text-muted-foreground">{description}</p>}
     </RevealOnScroll>
   );

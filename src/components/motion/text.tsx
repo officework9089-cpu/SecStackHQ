@@ -1,7 +1,7 @@
 import { motion } from "motion/react";
 import type { ElementType, ReactNode } from "react";
 
-import { cn } from "@/lib/utils";
+import { cn } from "@/lib/utils/calculator";
 import { easeOutExpo } from "@/animations/variants";
 
 /** Splits text into words and reveals each word with a staggered rise. */

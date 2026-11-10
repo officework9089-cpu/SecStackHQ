@@ -8,7 +8,7 @@ import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Dialog, DialogContent, DialogDescription, DialogTitle } from "@/components/ui/dialog";
 import { projectFilters, projects, type Project } from "@/data/site";
-import { cn } from "@/lib/utils";
+import { cn } from "@/lib/utils/calculator";
 
 export function Projects() {
   const [filter, setFilter] = useState<(typeof projectFilters)[number]>("All");

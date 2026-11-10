@@ -1,9 +1,11 @@
-import { Compass, Eye, Target } from "lucide-react";
+import { Compass, Eye, ShieldCheck, Target } from "lucide-react";
 
 import { Counter } from "@/components/common/Counter";
 import { Section, SectionHeading } from "@/components/common/SectionHeading";
 import { GradientText, MotionCard, SlideIn, StaggerContainer, TiltCard } from "@/components/motion";
 import { stats } from "@/data/site";
+import { FadeIn } from "@/components/motion/FadeIn";
+import AboutUs from "@/assets/project-security.jpg"
 
 const pillars = [
   {
@@ -39,7 +41,38 @@ export function About() {
             description="SecStackHQ is a technology and digital growth studio. We combine full-stack developers, ethical hackers, designers and marketers under one roof — so your website is beautiful, bulletproof and built to perform."
             className="mb-10 md:mb-12"
           />
-          <StaggerContainer className="grid grid-cols-2 gap-3 sm:gap-4">
+          
+        </div>
+
+        <div className="items-stretch mb-20">
+          {/* Visual Showcase (7 cols) */}
+          <div className="">
+            <FadeIn direction="right" className="h-full">
+              <div className="relative rounded-2xl overflow-hidden border border-slate-200 dark:border-slate-800 shadow-xl h-full group bg-slate-950">
+                <img
+                  src={AboutUs}
+                  alt="SecStackHQ Cyber Architecture and Cloud Engineering Facility"
+                  className="w-full h-80 object-cover object-center group-hover:scale-105 transition-transform duration-700 opacity-90"
+                  referrerPolicy="no-referrer"
+                />
+                <div className="absolute inset-0 bg-gradient-to-t from-slate-950/90 via-slate-950/30 to-transparent" />
+                <div className="absolute bottom-6 left-6 right-6 text-white">
+                  <div className="text-xs font-mono uppercase tracking-widest text-cyan-400 mb-1">
+                    Defensive Node Architecture
+                  </div>
+                  <h3 className="text-xl font-bold">Impenetrable Zero-Trust Web Systems</h3>
+                  <p className="text-xs text-slate-300 mt-1 max-w-md">
+                    Every web application built by our team undergoes simulated attack vectors before deployment.
+                  </p>
+                </div>
+              </div>
+            </FadeIn>
+          </div>
+
+        </div>
+      </div>
+      
+        <StaggerContainer className="grid grid-cols-4 gap-3 sm:gap-4">
             {stats.map((s) => (
               <MotionCard key={s.label} className="glass shadow-depth rounded-2xl p-5 sm:p-6">
                 <div className="font-display text-gradient text-3xl font-extrabold sm:text-4xl">
@@ -49,26 +82,6 @@ export function About() {
               </MotionCard>
             ))}
           </StaggerContainer>
-        </div>
-
-        <div className="flex flex-col gap-4 lg:pt-16">
-          {pillars.map((p, i) => (
-            <SlideIn key={p.title} direction="left" delay={i * 0.12}>
-              <TiltCard max={6} className="border-glow glass shadow-depth rounded-3xl">
-                <div className="flex gap-5 p-6 sm:p-8">
-                  <span className="bg-gradient-brand text-primary-foreground shadow-glow grid size-12 shrink-0 place-items-center rounded-2xl">
-                    <p.icon className="size-6" />
-                  </span>
-                  <div className="min-w-0">
-                    <h3 className="text-xl font-bold">{p.title}</h3>
-                    <p className="text-muted-foreground mt-2">{p.text}</p>
-                  </div>
-                </div>
-              </TiltCard>
-            </SlideIn>
-          ))}
-        </div>
-      </div>
     </Section>
   );
 }

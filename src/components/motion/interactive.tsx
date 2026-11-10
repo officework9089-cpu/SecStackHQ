@@ -9,7 +9,7 @@ import {
 } from "motion/react";
 import { useRef, type ReactNode, type PointerEvent } from "react";
 
-import { cn } from "@/lib/utils";
+import { cn } from "@/lib/utils/calculator";
 import { staggerItem } from "@/animations/variants";
 
 const isFinePointer = () =>

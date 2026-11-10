@@ -4,7 +4,7 @@ import { useRef } from "react";
 import { Section, SectionHeading } from "@/components/common/SectionHeading";
 import { GradientText } from "@/components/motion";
 import { processSteps } from "@/data/site";
-import { cn } from "@/lib/utils";
+import { cn } from "@/lib/utils/calculator";
 
 export function Process() {
   const ref = useRef<HTMLOListElement>(null);

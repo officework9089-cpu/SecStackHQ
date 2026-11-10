@@ -6,7 +6,7 @@ import { Section, SectionHeading } from "@/components/common/SectionHeading";
 import { GradientText, MotionCard, StaggerContainer, TiltCard } from "@/components/motion";
 import { services, type Service } from "@/data/site";
 import { scrollToSection } from "@/hooks/use-active-section";
-import { cn } from "@/lib/utils";
+import { cn } from "@/lib/utils/calculator";
 
 function ServiceCard({ service, index }: { service: Service; index: number }) {
   const [open, setOpen] = useState(false);

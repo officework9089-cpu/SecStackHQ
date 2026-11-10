@@ -2,7 +2,7 @@ import { motion, useMotionValue, useReducedMotion, useSpring, useTransform } fro
 import { Code2, Lock, Megaphone, Palette, ShieldCheck, TrendingUp } from "lucide-react";
 import type { PointerEvent } from "react";
 
-import markAsset from "@/assets/secstackhq_mark.png.asset.json";
+import markAsset from "@/assets/secstackhq_mark.png";
 import { FloatingElement } from "@/components/motion";
 
 const chips = [
@@ -42,51 +42,48 @@ export function HeroVisual() {
 
       <motion.div className="preserve-3d absolute inset-0" style={{ rotateX: rx, rotateY: ry }}>
         {/* orbit rings */}
-        <div className="border-brand-cyan/50 animate-spin-slow absolute inset-[6%] rounded-full border border-dashed" />
+        {/* <div className="border-brand-cyan/50 animate-spin-slow absolute inset-[6%] rounded-full border border-dashed" />
         <div className="animate-spin-reverse absolute inset-[14%] rounded-full border-2 border-transparent [border-top-color:var(--brand-violet)] [border-right-color:var(--brand-blue)]">
           <span className="bg-brand-violet shadow-glow absolute -top-1.5 left-1/2 size-3 rounded-full" />
-        </div>
-        <div className="animate-spin-slow absolute inset-[24%] rounded-full border border-transparent [border-bottom-color:var(--brand-cyan)]">
+        </div> */}
+        {/* <div className="animate-spin-slow absolute inset-[24%] rounded-full border border-transparent [border-bottom-color:var(--brand-cyan)]">
           <span className="bg-brand-cyan absolute -bottom-1 left-1/3 size-2 rounded-full" />
-        </div>
+        </div> */}
 
         {/* stacked glass plates */}
-        <div className="preserve-3d absolute inset-[26%] [transform:rotateX(58deg)_rotateZ(-45deg)]">
-          {[0, 1, 2].map((i) => (
-            <motion.div
-              key={i}
-              className="glass border-glow shadow-glow-lg absolute inset-0 rounded-[2rem]"
-              style={{ z: i * 46 - 46 }}
-              animate={reduce ? { z: i * 46 - 46 } : { z: [i * 46 - 46, i * 46 - 30, i * 46 - 46] }}
-              transition={{ duration: 4, delay: i * 0.3, repeat: Infinity, ease: "easeInOut" }}
-            >
-              <div
-                className="bg-gradient-brand absolute inset-[18%] rounded-2xl"
-                style={{ opacity: 0.12 + i * 0.14 }}
-              />
-            </motion.div>
-          ))}
-        </div>
+ <div className="pointer-events-none absolute inset-0 z-10 grid -translate-y-[6%] place-items-center">
+        <FloatingElement distance={10}>
+          <div className="bg-tile shadow-glow-lg grid  place-items-center rounded-[1.5rem] sm:size-60 size-33">
+            <img
+              src={markAsset}
+              alt="SecStackHQ emblem"
+              // width={128}
+              // height={128}
+              className="size-28 object-contain sm:size-55"
+            />
+          </div>
+        </FloatingElement>
+      </div>            
 
       </motion.div>
 
       {/* center mark (kept outside the 3D context so plates never occlude it) */}
-      <div className="pointer-events-none absolute inset-0 z-10 grid -translate-y-[6%] place-items-center">
+      {/* <div className="pointer-events-none absolute inset-0 z-10 grid -translate-y-[6%] place-items-center">
         <FloatingElement distance={10}>
-          <div className="bg-tile shadow-glow-lg grid size-24 place-items-center rounded-[1.5rem] sm:size-32">
+          <div className="bg-tile shadow-glow-lg grid  place-items-center rounded-[1.5rem] sm:size-60 size-33">
             <img
-              src={markAsset.url}
+              src={markAsset}
               alt="SecStackHQ emblem"
-              width={128}
-              height={128}
-              className="size-20 object-contain sm:size-28"
+              // width={128}
+              // height={128}
+              className="size-28 object-contain sm:size-55"
             />
           </div>
         </FloatingElement>
-      </div>
+      </div> */}
 
       {/* floating chips */}
-      {chips.map((c, i) => (
+      {/* {chips.map((c, i) => (
         <motion.div
           key={c.label}
           className={`absolute ${c.pos}`}
@@ -103,9 +100,9 @@ export function HeroVisual() {
             </div>
           </FloatingElement>
         </motion.div>
-      ))}
+      ))} */}
 
-      <motion.div
+      {/* <motion.div
         className="absolute left-[42%] top-[2%]"
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
@@ -116,7 +113,7 @@ export function HeroVisual() {
             <Lock className="size-3" /> 0 breaches
           </span>
         </FloatingElement>
-      </motion.div>
+      </motion.div> */}
     </div>
   );
 }

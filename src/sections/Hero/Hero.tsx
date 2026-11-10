@@ -23,15 +23,15 @@ export function Hero() {
 
       <div className="relative mx-auto grid w-full max-w-7xl items-center gap-12 px-5 sm:px-8 lg:grid-cols-[1.1fr_1fr] lg:gap-8">
         <motion.div style={{ y: yText, opacity: fade }} className="flex flex-col items-start gap-7">
-          <motion.div
+          {/* <motion.div
             initial={{ opacity: 0, y: 16 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.6, delay: 0.2 }}
           >
             <Eyebrow>Develop • Secure • Grow</Eyebrow>
-          </motion.div>
+          </motion.div> */}
 
-          <h1 className="text-display text-3d font-extrabold">
+          <h1 className="text-7xl text-3d font-extrabold">
             <AnimatedText
               text="Build. Secure. Grow."
               animateOnMount
