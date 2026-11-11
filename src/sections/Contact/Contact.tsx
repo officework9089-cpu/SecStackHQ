@@ -12,13 +12,13 @@ import { Textarea } from "@/components/ui/textarea";
 import { brand, services } from "@/data/site";
 import { buildMailto, buildWhatsApp, contactSchema, type ContactInput } from "@/lib/contact-schema";
 import { cn } from "@/lib/utils/calculator";
-import { validateContactForm, calculateProjectEstimate } from '@/lib/utils/calculator';
+import { calculateProjectEstimate } from '@/lib/utils/calculator';
 
 
 import { FadeIn } from "@/components/motion/FadeIn";
 
 type Errors = Partial<Record<keyof ContactInput, string>>;
-const empty: ContactInput = { name: "", email: "", subject: "",company: "", service: "", message: "" };
+const empty: ContactInput = { name: "", email: "", subject: "", company: "", service: "", message: "" };
 
 const contactCards = [
   { icon: Mail, title: "Email us", value: brand.email, href: `mailto:${brand.email}` },
@@ -116,37 +116,11 @@ export const Contact: React.FC<ContactProps> = ({ initialServiceId }) => {
         description="Tell us what you're building. We'll reply within 24 hours with next steps and a free consultation."
       />
 
-      <div className="grid gap-8 lg:grid-cols-[1fr_1.5fr]">
-        {/* <StaggerContainer className="grid content-start gap-4 sm:grid-cols-2 lg:grid-cols-1">
-          {contactCards.map((c) => {
-            const inner = (
-              <div className="flex items-center gap-4 p-5">
-                <span className="bg-gradient-brand text-primary-foreground shadow-glow grid size-12 shrink-0 place-items-center rounded-2xl">
-                  <c.icon className="size-5" />
-                </span>
-                <span className="min-w-0">
-                  <span className="block text-sm font-bold">{c.title}</span>
-                  <span className="text-muted-foreground block truncate text-sm">{c.value}</span>
-                </span>
-              </div>
-            );
-            return (
-              <MotionCard key={c.title} className="border-glow glass shadow-depth rounded-3xl">
-                {c.href ? (
-                  <a href={c.href} target={c.href.startsWith("http") ? "_blank" : undefined} rel="noreferrer" className="block">
-                    {inner}
-                  </a>
-                ) : (
-                  inner
-                )}
-              </MotionCard>
-            );
-          })}
-        </StaggerContainer> */}
-        <div className="">
+      <div className="grid min-w-0 grid-cols-1 items-start gap-8 sm:gap-10 xl:grid-cols-[minmax(0,0.85fr)_minmax(0,1.15fr)] xl:gap-12 2xl:gap-16">
+        <div className="border-glow glass shadow-glow-lg relative overflow-hidden rounded-[2rem]">
           <FadeIn direction="right">
-            <div className="p-6 sm:p-7 rounded-2xl bg-slate-50 dark:bg-slate-950/70 border border-slate-200/80 dark:border-slate-800 shadow-xl space-y-6">
-              <div className="flex items-center justify-between border-b border-slate-200/60 dark:border-slate-800 pb-4">
+            <div className="p-6 sm:p-7 rounded-2xl bg-slate-50 dark:bg-slate-950/70 border border-slate-200/80 dark:border-slate-800 shadow-xl space-y-5">
+              <div className="flex flex-wrap items-center justify-between border-b border-slate-200/60 dark:border-slate-800 pb-4">
                 <div className="flex items-center gap-2">
                   <Calculator className="w-4 h-4 text-cyan-600 dark:text-cyan-400" />
                   <h3 className="text-sm font-bold uppercase tracking-wider text-slate-900 dark:text-white">
@@ -223,7 +197,7 @@ export const Contact: React.FC<ContactProps> = ({ initialServiceId }) => {
                   <span className="text-xs text-slate-500 dark:text-slate-400 font-medium">
                     Estimated Investment:
                   </span>
-                  <span className="text-2xl font-extrabold font-mono text-cyan-600 dark:text-cyan-400 tabular-nums">
+                  <span className="text-xl font-extrabold font-mono text-cyan-600 tabular-nums dark:text-cyan-400 sm:text-2xl">
                     {estimate.baseCost.toLocaleString()}
                   </span>
                 </div>
