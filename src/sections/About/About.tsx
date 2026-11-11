@@ -41,7 +41,7 @@ export function About() {
             description="SecStackHQ is a technology and digital growth studio. We combine full-stack developers, ethical hackers, designers and marketers under one roof — so your website is beautiful, bulletproof and built to perform."
             className="mb-10 md:mb-12"
           />
-          
+
         </div>
 
         <div className="items-stretch mb-20">
@@ -71,17 +71,24 @@ export function About() {
 
         </div>
       </div>
-      
-        <StaggerContainer className="grid grid-cols-4 gap-3 sm:gap-4">
-            {stats.map((s) => (
-              <MotionCard key={s.label} className="glass shadow-depth rounded-2xl p-5 sm:p-6">
-                <div className="font-display text-gradient text-3xl font-extrabold sm:text-4xl">
-                  <Counter value={s.value} suffix={s.suffix} />
-                </div>
-                <p className="text-muted-foreground mt-1 text-sm font-medium">{s.label}</p>
-              </MotionCard>
-            ))}
-          </StaggerContainer>
+
+      <StaggerContainer className="grid grid-cols-2 gap-3 sm:gap-4 lg:grid-cols-4">
+        {stats.map((s) => (
+          <MotionCard
+            key={s.label}
+            className="glass shadow-depth flex min-w-0 flex-col justify-center rounded-2xl p-3 text-center sm:p-5 lg:p-6"
+          >
+            <div className="font-display text-gradient text-2xl font-extrabold sm:text-3xl lg:text-4xl">
+              <Counter value={s.value} suffix={s.suffix} />
+            </div>
+
+            <p className="text-muted-foreground mt-1 text-xs font-medium sm:text-sm">
+              {s.label}
+            </p>
+          </MotionCard>
+        ))}
+      </StaggerContainer>
+
     </Section>
   );
 }

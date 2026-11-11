@@ -1,37 +1,121 @@
+
 import { motion, useScroll, useTransform } from "motion/react";
 import { ArrowRight, ChevronDown, Play } from "lucide-react";
-import { useRef } from "react";
+import { useEffect, useRef, useState } from "react";
+
+
+import { AnimatePresence } from "motion/react";
+
+import heroLight from "@/assets/Bg_Secstack.png";
+import heroDark from "@/assets/Bd_Sectsack_dark.png";
 
 import { GridBackdrop, Particles } from "@/components/common/BackgroundFX";
-import { Eyebrow } from "@/components/common/SectionHeading";
 import { AnimatedText, MagneticButton } from "@/components/motion";
 import { Button } from "@/components/ui/button";
 import { scrollToSection } from "@/hooks/use-active-section";
-import { HeroVisual } from "./HeroVisual";
 
 export function Hero() {
   const ref = useRef<HTMLElement>(null);
-  const { scrollYProgress } = useScroll({ target: ref, offset: ["start start", "end start"] });
-  const yText = useTransform(scrollYProgress, [0, 1], [0, 120]);
-  const yVisual = useTransform(scrollYProgress, [0, 1], [0, -80]);
+
+  const { scrollYProgress } = useScroll({
+    target: ref,
+    offset: ["start start", "end start"],
+  });
+
+  const [resolvedTheme, setResolvedTheme] = useState<"dark" | "light">("light");
+
+  useEffect(() => {
+    const updateTheme = () =>
+      setResolvedTheme(document.documentElement.classList.contains("dark") ? "dark" : "light");
+
+    updateTheme();
+
+    const observer = new MutationObserver(updateTheme);
+    observer.observe(document.documentElement, {
+      attributes: true,
+      attributeFilter: ["class"],
+    });
+
+    return () => observer.disconnect();
+  }, []);
+const heroBackground = resolvedTheme === "dark" ? heroDark : heroLight;
+
+  const yText = useTransform(scrollYProgress, [0, 1], [0, 100]);
   const fade = useTransform(scrollYProgress, [0, 0.8], [1, 0]);
 
   return (
-    <section ref={ref} id="home" className="relative flex min-h-[100svh] items-center overflow-hidden pt-28 pb-16">
-      <GridBackdrop />
-      <Particles />
+    <section
+      ref={ref}
+      id="home"
+      className="relative flex min-h-[100svh] items-center overflow-hidden pt-28 pb-16"
+    >
+      {/* Background image */}
+      
+{/* Dynamic theme background */}
+<div className="absolute inset-0 z-0 overflow-hidden">
 
-      <div className="relative mx-auto grid w-full max-w-7xl items-center gap-12 px-5 sm:px-8 lg:grid-cols-[1.1fr_1fr] lg:gap-8">
-        <motion.div style={{ y: yText, opacity: fade }} className="flex flex-col items-start gap-7">
-          {/* <motion.div
+  <AnimatePresence mode="sync">
+    <motion.img
+      key={heroBackground}
+      src={heroBackground}
+      alt=""
+      initial={{ opacity: 0 }}
+      animate={{ opacity: 1 }}
+      exit={{ opacity: 0 }}
+      transition={{ duration: 0.8, ease: "easeInOut" }}
+      className="absolute inset-0 h-full w-full object-cover object-center"
+    />
+  </AnimatePresence>
+
+  {/* Theme-specific overlay */}
+  <div
+    className={`absolute inset-0 transition-colors duration-700 ${
+      resolvedTheme === "dark"
+        ? "bg-[#050816]/25"
+        : "bg-white/15"
+    }`}
+  />
+
+  {/* Content readability gradient */}
+  <div className="absolute inset-0 bg-gradient-to-r from-background/70 via-background/20 to-transparent" />
+
+  {/* Bottom fade */}
+  <div className="absolute inset-0 bg-gradient-to-t from-background/80 via-transparent to-background/10" />
+
+  {/* Brand ambient glow */}
+  <div className="absolute right-0 top-1/4 h-96 w-96 rounded-full bg-blue-500/10 blur-[120px]" />
+
+  <div className="absolute bottom-0 left-1/4 h-72 w-72 rounded-full bg-cyan-400/10 blur-[100px]" />
+
+</div>
+
+
+      {/* Existing background effects */}
+      <div className="pointer-events-none absolute inset-0 z-[1]">
+        {/* <GridBackdrop /> */}
+        <Particles />
+      </div>
+
+      {/* Hero content */}
+      <div className="relative z-10 mx-auto w-full max-w-7xl px-5 sm:px-8">
+        <motion.div
+          // style={{ y: yText, opacity: fade }}
+          className="flex max-w-3xl flex-col items-start gap-7"
+        >
+          {/* Brand eyebrow */}
+          <motion.div
             initial={{ opacity: 0, y: 16 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.6, delay: 0.2 }}
+            transition={{ duration: 0.6 }}
+            className="rounded-full border border-primary/20 bg-primary/5 px-5 py-2 text-sm font-semibold tracking-widest text-primary backdrop-blur-md"
           >
-            <Eyebrow>Develop • Secure • Grow</Eyebrow>
-          </motion.div> */}
+            DEVELOP <span className="px-2 text-cyan-400">•</span>
+            SECURE <span className="px-2 text-violet-500">•</span>
+            GROW
+          </motion.div>
 
-          <h1 className="text-7xl text-3d font-extrabold">
+          {/* Main heading */}
+          <h1 className="text-5xl font-extrabold leading-[1.05] tracking-tight sm:text-6xl lg:text-7xl xl:text-8xl">
             <AnimatedText
               text="Build. Secure. Grow."
               animateOnMount
@@ -41,16 +125,19 @@ export function Hero() {
             />
           </h1>
 
+          {/* Description */}
           <motion.p
-            className="text-lead text-muted-foreground max-w-xl"
+            className="text-lead max-w-2xl text-muted-foreground"
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.8, delay: 0.9 }}
           >
-            Transform your ideas into powerful digital experiences with technology, security, and creative
-            innovation.
+            Transform your ideas into powerful digital experiences with
+            innovative technology, advanced cybersecurity, and creative
+            digital solutions.
           </motion.p>
 
+          {/* CTA buttons */}
           <motion.div
             className="flex w-full flex-col gap-3 sm:w-auto sm:flex-row"
             initial={{ opacity: 0, y: 20 }}
@@ -58,58 +145,70 @@ export function Hero() {
             transition={{ duration: 0.8, delay: 1.1 }}
           >
             <MagneticButton className="w-full sm:w-auto">
-              <Button variant="hero" size="xl" className="group w-full" onClick={() => scrollToSection("contact")}>
+              <Button
+                variant="hero"
+                size="xl"
+                className="group w-full"
+                onClick={() => scrollToSection("contact")}
+              >
                 Start a Project
                 <ArrowRight className="transition-transform group-hover:translate-x-1" />
               </Button>
             </MagneticButton>
+
             <MagneticButton className="w-full sm:w-auto">
-              <Button variant="glass" size="xl" className="w-full" onClick={() => scrollToSection("projects")}>
-                <Play className="text-primary" /> View Our Work
+              <Button
+                variant="glass"
+                size="xl"
+                className="w-full"
+                onClick={() => scrollToSection("projects")}
+              >
+                <Play className="text-primary" />
+                View Our Work
               </Button>
             </MagneticButton>
           </motion.div>
 
+          {/* Stats */}
           <motion.div
-            className="text-muted-foreground flex flex-wrap items-center gap-x-6 gap-y-2 text-sm font-semibold"
+            className="flex flex-wrap items-center gap-x-6 gap-y-3 pt-3 text-sm font-semibold text-muted-foreground"
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             transition={{ delay: 1.4 }}
           >
             <span>
-              <strong className="text-foreground">120+</strong> projects
+              <strong className="text-foreground">120+</strong> Projects
             </span>
-            <span className="bg-border hidden h-4 w-px sm:block" />
+
+            <span className="hidden h-4 w-px bg-border sm:block" />
+
             <span>
-              <strong className="text-foreground">15+</strong> countries
+              <strong className="text-foreground">15+</strong> Countries
             </span>
-            <span className="bg-border hidden h-4 w-px sm:block" />
+
+            <span className="hidden h-4 w-px bg-border sm:block" />
+
             <span>
-              <strong className="text-foreground">24/7</strong> support
+              <strong className="text-foreground">24/7</strong> Support
             </span>
           </motion.div>
         </motion.div>
-
-        <motion.div
-          style={{ y: yVisual }}
-          initial={{ opacity: 0, scale: 0.85 }}
-          animate={{ opacity: 1, scale: 1 }}
-          transition={{ duration: 1.2, delay: 0.3, ease: [0.16, 1, 0.3, 1] }}
-        >
-          <HeroVisual />
-        </motion.div>
       </div>
 
+      {/* Scroll indicator */}
       <motion.button
         onClick={() => scrollToSection("about")}
-        className="text-muted-foreground absolute bottom-6 left-1/2 hidden -translate-x-1/2 flex-col items-center gap-1 text-xs font-semibold md:flex"
+        className="absolute bottom-6 left-1/2 z-10 hidden -translate-x-1/2 flex-col items-center gap-1 text-xs font-semibold text-muted-foreground md:flex"
         aria-label="Scroll to about section"
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
         transition={{ delay: 1.8 }}
       >
         Scroll
-        <motion.span animate={{ y: [0, 6, 0] }} transition={{ duration: 1.6, repeat: Infinity }}>
+        <motion.span
+          animate={{ y: [0, 6, 0] }}
+          transition={{ duration: 1.6, repeat: Infinity }}
+        >
           <ChevronDown className="size-5" />
         </motion.span>
       </motion.button>

@@ -38,8 +38,8 @@ export const brand = {
 export const navLinks = [
   { id: "home", label: "Home" },
   { id: "about", label: "About" },
-  { id: "services", label: "Services" },
   { id: "projects", label: "Projects" },
+  { id: "services", label: "Services" },
   { id: "process", label: "Process" },
   { id: "contact", label: "Contact" },
 ] as const;

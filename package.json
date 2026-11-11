@@ -17,7 +17,10 @@
     "rolldown": "1.2.1"
   },
   "dependencies": {
+    "@animate-ui/react": "^2.4.3",
     "@hookform/resolvers": "^5.2.2",
+    "@hugeicons/core-free-icons": "^4.4.0",
+    "@hugeicons/react": "^1.1.10",
     "@radix-ui/react-accordion": "^1.2.12",
     "@radix-ui/react-alert-dialog": "^1.1.15",
     "@radix-ui/react-aspect-ratio": "^1.1.8",

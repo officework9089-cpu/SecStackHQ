@@ -1,5 +1,16 @@
 import { AnimatePresence, motion, useMotionValueEvent, useScroll } from "motion/react";
-import { Command, Moon, Sun } from "lucide-react";
+import {
+  Command,
+  ComputerIcon,
+  Moon,
+  Sun,
+  type LucideIcon,
+} from "lucide-react";
+import {
+  ThemeToggler,
+  type Resolved,
+  type ThemeSelection,
+} from "@animate-ui/react/primitives/effects/theme-toggler";
 import { useEffect, useState } from "react";
 
 import { Logo } from "@/components/common/Logo";
@@ -8,7 +19,7 @@ import { Button } from "@/components/ui/button";
 import { navLinks } from "@/data/site";
 import { scrollToSection, useActiveSection } from "@/hooks/use-active-section";
 import { cn } from "@/lib/utils/calculator";
-
+import { MobileBottomNav } from "@/components/layout/MobileBottomNav";
 const ids = navLinks.map((l) => l.id);
 
 export function Navbar({
@@ -36,6 +47,17 @@ export function Navbar({
   const go = (id: string) => {
     setOpen(false);
     scrollToSection(id);
+  };
+  const NEXT: Record<ThemeSelection, ThemeSelection> = {
+    light: "system",
+    system: "dark",
+    dark: "light",
+  };
+
+  const ICONS = {
+    light: Sun,
+    dark: Moon,
+    system: ComputerIcon,
   };
 
   return (
@@ -101,23 +123,28 @@ export function Navbar({
             >
               <Command className="size-3.5" /> K
             </button>
-            <button
-              onClick={onToggleTheme}
-              className="hover:bg-accent grid size-10 place-items-center rounded-full transition-colors"
-              aria-label={theme === "dark" ? "Switch to light theme" : "Switch to dark theme"}
+            <ThemeToggler
+              theme={theme as ThemeSelection}
+              resolvedTheme={theme as Resolved}
+              setTheme={(nextTheme) => {
+                if (nextTheme !== theme) onToggleTheme();
+              }}
             >
-              <AnimatePresence mode="wait" initial={false}>
-                <motion.span
-                  key={theme}
-                  initial={{ rotate: -90, opacity: 0, scale: 0.6 }}
-                  animate={{ rotate: 0, opacity: 1, scale: 1 }}
-                  exit={{ rotate: 90, opacity: 0, scale: 0.6 }}
-                  transition={{ duration: 0.25 }}
+              {({ effective, toggleTheme }) => (
+                <Button
+                  variant="ghost"
+                  size="icon"
+                  className="size-10 rounded-full"
+                  aria-label={`Theme: ${effective}. Switch to ${NEXT[effective]}`}
+                  onClick={() => toggleTheme(NEXT[effective])}
                 >
-                  {theme === "dark" ? <Sun className="size-5" /> : <Moon className="size-5" />}
-                </motion.span>
-              </AnimatePresence>
-            </button>
+                  {(() => {
+                    const Icon = ICONS[effective];
+                    return <Icon size={20} strokeWidth={2} />;
+                  })()}
+                </Button>
+              )}
+            </ThemeToggler>
             <MagneticButton className="hidden sm:inline-block">
               <Button variant="hero" size="lg" onClick={() => go("contact")}>
                 Start a Project
@@ -201,6 +228,7 @@ export function Navbar({
           </motion.div>
         )}
       </AnimatePresence>
+      <MobileBottomNav />
     </>
   );
 }

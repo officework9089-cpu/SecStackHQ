@@ -64,15 +64,15 @@ function Index() {
         Skip to content
       </a>
       <ScrollProgress />
-      <CustomCursor />
+      {/* <CustomCursor /> */}
       <Navbar theme={theme} onToggleTheme={toggle} onOpenCommand={() => setCmdOpen(true)} />
       <CommandMenu open={cmdOpen} onOpenChange={setCmdOpen} />
       <PageTransition>
         <main id="main" className="overflow-x-clip">
           <Hero />
           <About />
-          <Services />
           <Projects />
+          <Services />
           <WhyUs />
           <Process />
           <Testimonials />
