@@ -8,7 +8,7 @@ export function Logo({ className, showText = true }: { className?: string; showT
         <img src={markAsset} alt="" width={40} height={40} className="size-9 object-contain" />
       </span>
       {showText && (
-        <span className="font-display truncate text-lg font-bold sm:text-xl">
+        <span className="font-display truncate text-sm font-bold sm:text-xl">
           SecStack<span className="text-gradient">HQ</span>
         </span>
       )}

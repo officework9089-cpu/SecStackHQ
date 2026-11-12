@@ -27,6 +27,7 @@ export const Route = createFileRoute("/api/ai")({ server: { handlers: { POST: as
       }});
       return createUIMessageStreamResponse({ stream, headers: { "X-AI-Mode": "demo" } });
     }
+    if (!key) return Response.json({ message: "Live AI is not configured." }, { status: 401 });
     const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
     const blocked = await supabaseAdmin.from("ai_access_state").select("status,message").eq("key", "gateway").maybeSingle();
     if (blocked.error) return Response.json({ message: "AI safety checks are unavailable." }, { status: 503 });

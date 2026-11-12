@@ -24,7 +24,7 @@ export const Route = createFileRoute("/contact")({ validateSearch: zodValidator(
 function ContactPage() {
   const search = Route.useSearch(); const intake = usePlatform((s) => s.intake); const save = useServerFn(saveInquiry); const read = useServerFn(readInquiryReceipt);
   const [honeypot, setHoneypot] = useState(""); const [lastSent, setLastSent] = useState(0); const [sent, setSent] = useState<ContactInput | null>(null); const [receipt, setReceipt] = useState<{ subject: string; service: string } | null>(null);
-  const form = useForm<ContactInput>({ resolver: zodResolver(contactSchema), defaultValues: { name: "", company: "", email: "", subject: "", service: "", message: "" } });
+  const form = useForm<ContactInput>({ resolver: zodResolver(contactSchema), defaultValues: { name: "", company: "", email: "", subject: intake.subject ?? "", service: search.service ?? intake.service ?? "", message: search.message ?? intake.message ?? "" } });
   const { reset, setValue, register, handleSubmit, watch, formState: { errors } } = form;
   useEffect(() => { reset({ name: "", company: "", email: "", subject: "", service: search.service ?? "", message: search.message ?? "", ...intake }); }, [reset, search.service, search.message, intake]);
   const mutation = useMutation({ mutationFn: async (data: ContactInput) => {
