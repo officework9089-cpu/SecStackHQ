@@ -1,0 +1,12 @@
+CREATE TABLE public.inquiries (id uuid PRIMARY KEY DEFAULT gen_random_uuid(), created_at timestamptz NOT NULL DEFAULT now(), name text NOT NULL, email text NOT NULL, company text NOT NULL, subject text NOT NULL, service text NOT NULL, message text NOT NULL, receipt_hash text NOT NULL);
+GRANT ALL ON public.inquiries TO service_role;
+ALTER TABLE public.inquiries ENABLE ROW LEVEL SECURITY;
+CREATE TABLE public.usage_windows (key text PRIMARY KEY, started_at timestamptz NOT NULL DEFAULT now(), count integer NOT NULL DEFAULT 0);
+GRANT ALL ON public.usage_windows TO service_role;
+ALTER TABLE public.usage_windows ENABLE ROW LEVEL SECURITY;
+CREATE TABLE public.ai_access_state (key text PRIMARY KEY, status integer NOT NULL, message text NOT NULL, updated_at timestamptz NOT NULL DEFAULT now());
+GRANT ALL ON public.ai_access_state TO service_role;
+ALTER TABLE public.ai_access_state ENABLE ROW LEVEL SECURITY;
+CREATE FUNCTION public.consume_usage(_key text, _limit integer, _seconds integer) RETURNS boolean LANGUAGE plpgsql SECURITY DEFINER SET search_path = public AS $$ DECLARE n integer; BEGIN INSERT INTO public.usage_windows(key, count) VALUES (_key,1) ON CONFLICT (key) DO UPDATE SET count = CASE WHEN usage_windows.started_at < now() - make_interval(secs => _seconds) THEN 1 ELSE usage_windows.count + 1 END, started_at = CASE WHEN usage_windows.started_at < now() - make_interval(secs => _seconds) THEN now() ELSE usage_windows.started_at END RETURNING count INTO n; RETURN n <= _limit; END; $$;
+REVOKE ALL ON FUNCTION public.consume_usage(text,integer,integer) FROM PUBLIC, anon, authenticated;
+GRANT EXECUTE ON FUNCTION public.consume_usage(text,integer,integer) TO service_role;
