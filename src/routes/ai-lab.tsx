@@ -1,0 +1,12 @@
+import { createFileRoute } from "@tanstack/react-router";
+import { lazy, Suspense } from "react";
+import { pageHead } from "@/lib/page-head";
+import { PageIntro, PageSection } from "@/components/common/PageIntro";
+import { Button } from "@/components/ui/button";
+import { Skeleton } from "@/components/ui/skeleton";
+import { usePlatform } from "@/store/platform";
+import { ShieldCheck, MessageSquare } from "lucide-react";
+const Scanner = lazy(() => import("@/features/ai/SecurityScanner"));
+const Estimator = lazy(() => import("@/features/ai/ProjectEstimator"));
+export const Route = createFileRoute("/ai-lab")({ head: () => pageHead("AI Lab", "Try SecStackHQ's transparent AI experiences: simulated security reports, project scoping and a grounded copilot.", "/ai-lab"), component: AILabPage });
+function AILabPage() { const demo = usePlatform((s) => s.demo); const setDemo = usePlatform((s) => s.setDemo); return <><PageIntro eyebrow="The SecStackHQ AI Lab" title="Less guessing. More clarity." description="A space to explore your next project, understand security, and find a practical starting point."><div className="flex flex-wrap gap-3"><Button variant={demo ? "default" : "outline"} className="h-11" onClick={() => setDemo(true)}>Demo mode</Button><Button variant={!demo ? "default" : "outline"} className="h-11" onClick={() => setDemo(false)}>Live AI</Button><span className="self-center text-sm text-muted-foreground">Scanner always uses simulated results</span></div></PageIntro><PageSection><div className="grid gap-8 xl:grid-cols-2 items-start"><Suspense fallback={<Skeleton className="h-96" />}><Scanner /></Suspense><Suspense fallback={<Skeleton className="h-96" />}><Estimator /></Suspense></div><div className="mt-12 border-y py-10 flex flex-col sm:flex-row gap-8 items-start sm:items-center justify-between"><div><h2 className="text-2xl font-bold">A second perspective, on demand.</h2><p className="mt-3 text-muted-foreground">Ask about our services, sample pricing, or a safer path to launch.</p></div><Button className="h-12 shrink-0" onClick={() => usePlatform.getState().ask("Help me plan a secure web application")}><MessageSquare />Ask SecStack Copilot</Button></div></PageSection></>; }

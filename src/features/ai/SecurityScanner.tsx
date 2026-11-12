@@ -1,0 +1,24 @@
+import { useEffect, useRef, useState } from "react";
+import { Link } from "@tanstack/react-router";
+import { useReducedMotion } from "motion/react";
+import { ArrowUpRight, ShieldCheck, Radar, RotateCcw } from "lucide-react";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Badge } from "@/components/ui/badge";
+import { Progress } from "@/components/ui/progress";
+import { simulateScan } from "./rules";
+
+export default function SecurityScanner() {
+  const [url, setUrl] = useState(""); const [error, setError] = useState(""); const [progress, setProgress] = useState(0);
+  const [result, setResult] = useState<ReturnType<typeof simulateScan> | null>(null); const [busy, setBusy] = useState(false);
+  const timer = useRef<ReturnType<typeof setInterval> | null>(null); const reduced = useReducedMotion();
+  useEffect(() => () => { if (timer.current) clearInterval(timer.current); }, []);
+  const run = () => {
+    setError(""); setResult(null);
+    try { const simulated = simulateScan(url); if (reduced) { setResult(simulated); setProgress(100); return; }
+      setBusy(true); setProgress(0); let current = 0; timer.current = setInterval(() => { current += 10; setProgress(current); if (current >= 100) { if (timer.current) clearInterval(timer.current); setBusy(false); setResult(simulated); } }, 180);
+    } catch { setError("Enter a valid HTTP or HTTPS URL without credentials."); }
+  };
+  return <div className="border rounded-lg overflow-hidden bg-card"><div className="p-6 sm:p-8 border-b"><div className="flex items-center justify-between mb-6 gap-3"><div className="flex items-center gap-3"><ShieldCheck className="size-6 text-primary" /><h2 className="text-xl font-bold">Security scanner</h2></div><Badge variant="secondary">Simulated demo</Badge></div><p className="text-sm leading-6 text-muted-foreground mb-6">An illustrative security report. No requests are sent to your URL.</p><form onSubmit={(e) => { e.preventDefault(); run(); }} className="flex flex-col sm:flex-row gap-3"><Input aria-label="Website URL" value={url} onChange={(e) => setUrl(e.target.value)} placeholder="https://example.com" className="h-12" maxLength={2048} /><Button type="submit" className="h-12" disabled={busy}><Radar />{busy ? "Simulating…" : "Run demo scan"}</Button></form>{error && <p role="alert" className="text-destructive text-sm mt-3">{error}</p>}</div>
+    <div className="p-6 sm:p-8 min-h-52">{busy ? <div role="status" className="space-y-5"><div className="flex gap-4 items-center"><Radar className="size-10 text-primary animate-spin-slow" /><div><p className="font-semibold">{progress < 40 ? "Simulating header checks" : progress < 70 ? "Simulating transport checks" : "Preparing illustrative findings"}</p><p className="text-sm text-muted-foreground mt-1">Demo only · no target contacted</p></div></div><Progress value={progress} /><p className="font-mono text-sm text-primary">{progress}%</p></div> : result ? <div aria-live="polite"><div className="flex flex-wrap justify-between gap-6 mb-6"><div><p className="text-xs text-muted-foreground uppercase">Illustrative risk score</p><p className="text-4xl font-bold mt-2">{result.score}<span className="text-lg text-muted-foreground">/100</span></p></div><div className="max-w-xs text-right text-sm text-muted-foreground break-all">{result.target}<p className="mt-2 text-xs">AI-generated presentation · fixed sample findings</p></div></div><Progress value={result.score} className="mb-6" /><ul className="divide-y">{result.findings.map((f) => <li key={f.title} className="py-4"><div className="flex items-center justify-between gap-3"><h3 className="font-semibold">{f.title}</h3><Badge variant={f.severity === "Critical" || f.severity === "High" ? "destructive" : "secondary"}>{f.severity}</Badge></div><p className="mt-2 text-sm leading-6 text-muted-foreground">{f.text}</p></li>)}</ul><Button asChild className="mt-6 h-11"><Link to="/contact" search={{ service: "Cybersecurity", message: "I would like an authorized penetration test for my website." }}>Get a full penetration test <ArrowUpRight /></Link></Button></div> : <div className="flex items-center gap-5 py-5"><Radar className="size-16 text-primary/40" /><div><h3 className="font-semibold">A safer starting point.</h3><p className="text-sm text-muted-foreground mt-2">Headers · TLS · exposed paths · technology disclosure</p></div></div>}</div><p className="border-t px-6 py-4 text-xs leading-6 text-muted-foreground bg-surface">This is not a real scan, vulnerability assessment, or evidence about a website. Real testing requires written authorization.</p></div>;
+}
