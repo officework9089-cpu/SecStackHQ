@@ -85,12 +85,20 @@ export const services: Service[] = [
   },
   {
     id: "seo",
-    title: "SEO & Digital Marketing",
-    short: "SEO & Marketing",
+    title: "Search Engine Optimization",
+    short: "SEO",
     description:
-      "Data-driven SEO and performance marketing that puts you in front of the right customers and turns traffic into revenue.",
+       "Technical SEO and content strategy that help the right customers find your business through organic search.",
     icon: TrendingUp,
-    points: ["Technical & on-page SEO", "Content strategy", "Paid ads & analytics"],
+    points: ["Technical & on-page SEO", "Content strategy", "Search analytics"],
+  },
+  {
+    id: "marketing",
+    title: "Digital Marketing",
+    short: "Digital Marketing",
+    description: "Performance campaigns, conversion strategy and measurable acquisition for ambitious businesses.",
+    icon: TrendingUp,
+    points: ["Paid acquisition", "Conversion optimization", "Campaign analytics"],
   },
   {
     id: "social",
