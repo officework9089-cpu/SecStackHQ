@@ -1,4 +1,4 @@
-import test from 'node:test';
+import { test } from 'vitest';
 import assert from 'node:assert/strict';
 import { validateContactForm, calculateProjectEstimate, filterProjects } from '@/lib/utils/calculator';
 import { ProjectItem } from '@/types';

@@ -14,13 +14,90 @@ export type Database = {
   }
   public: {
     Tables: {
-      [_ in never]: never
+      ai_access_state: {
+        Row: {
+          key: string
+          message: string
+          status: number
+          updated_at: string
+        }
+        Insert: {
+          key: string
+          message: string
+          status: number
+          updated_at?: string
+        }
+        Update: {
+          key?: string
+          message?: string
+          status?: number
+          updated_at?: string
+        }
+        Relationships: []
+      }
+      inquiries: {
+        Row: {
+          company: string
+          created_at: string
+          email: string
+          id: string
+          message: string
+          name: string
+          receipt_hash: string
+          service: string
+          subject: string
+        }
+        Insert: {
+          company: string
+          created_at?: string
+          email: string
+          id?: string
+          message: string
+          name: string
+          receipt_hash: string
+          service: string
+          subject: string
+        }
+        Update: {
+          company?: string
+          created_at?: string
+          email?: string
+          id?: string
+          message?: string
+          name?: string
+          receipt_hash?: string
+          service?: string
+          subject?: string
+        }
+        Relationships: []
+      }
+      usage_windows: {
+        Row: {
+          count: number
+          key: string
+          started_at: string
+        }
+        Insert: {
+          count?: number
+          key: string
+          started_at?: string
+        }
+        Update: {
+          count?: number
+          key?: string
+          started_at?: string
+        }
+        Relationships: []
+      }
     }
     Views: {
       [_ in never]: never
     }
     Functions: {
-      [_ in never]: never
+      consume_usage: {
+        Args: { _key: string; _limit: number; _seconds: number }
+        Returns: boolean
+      }
     }
     Enums: {
       [_ in never]: never

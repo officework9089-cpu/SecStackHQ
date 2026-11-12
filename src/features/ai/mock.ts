@@ -1,0 +1,10 @@
+import { matchService } from "./rules";
+export function mockAnswer(prompt: string) {
+  if (/ignore|system prompt|secret|api key/i.test(prompt)) return "I can help with SecStackHQ services and project planning, but cannot reveal private instructions or credentials.";
+  if (/price|pricing|plan|cost/i.test(prompt)) return "### Sample pricing\nStarter: **$499/month**. Growth: **$1,499/month**. Enterprise: **$3,999/month**. Annual samples are $399, $1,199 and $3,199 per month, billed yearly.\n\nThese are illustrative USD prices, not approved offers. Your actual scope needs a conversation with SecStackHQ.";
+  if (/pentest|secur|vulnerab/i.test(prompt)) return "### Security, in plain language\nA penetration test is an authorized attempt to find weaknesses before an attacker does.\n\n1. Agree the scope and written permission.\n2. Review the application and APIs.\n3. Verify findings safely.\n4. Deliver a prioritized report and retest fixes.\n\nSecStackHQ offers web/API pentesting, vulnerability assessments and hardening. The scanner in AI Lab is a **simulation**, not a real assessment.";
+  if (/process|timeline/i.test(prompt)) return "### From idea to launch\nDiscovery → Planning → Design → Development → Testing & Security → Deployment.\n\nA timeline depends on scope and integrations. Use the project estimator for an illustrative starting point, then confirm details with the team.";
+  const service = matchService(prompt);
+  if (!service || !/web|app|site|brand|design|seo|social|marketing|project|build|grow|develop/i.test(prompt)) return "I don't have verified information on that. I can help with SecStackHQ's services, sample pricing and delivery process, or help you prepare a project inquiry.";
+  return `### ${service.title}\n${service.description}\n\n${service.points.map((p) => `- ${p}`).join("\n")}\n\nStart with your goals, audience, existing setup and desired timeline. The team can confirm a suitable scope. This is a grounded demo response, not a final quote.`;
+}

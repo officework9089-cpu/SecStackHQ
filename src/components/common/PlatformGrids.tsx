@@ -1,0 +1,13 @@
+import { Link } from "@tanstack/react-router";
+import { ArrowUpRight } from "lucide-react";
+import { services, serviceSlugs, projects } from "@/data/platform";
+import { Badge } from "@/components/ui/badge";
+import { MotionCard } from "@/components/motion";
+export function ServiceGrid({ compact = false }: { compact?: boolean }) {
+  return <div className="grid gap-px bg-border border rounded-lg overflow-hidden sm:grid-cols-2 lg:grid-cols-3">{services.map((s, i) => <div key={s.id} className="bg-background p-7 sm:p-9 group"><div className="flex justify-between items-center mb-8"><s.icon className="size-7 text-primary" /><span className="text-xs font-mono text-muted-foreground">0{i + 1}</span></div><h3 className="text-xl font-semibold"><Link to="/services/$slug" params={{ slug: serviceSlugs[s.id] ?? s.id }} className="hover:text-primary">{s.short}</Link></h3><p className="text-sm leading-7 text-muted-foreground mt-4">{s.description}</p>{!compact && <ul className="mt-5 space-y-2 text-sm">{s.points.map((p) => <li key={p}>— {p}</li>)}</ul>}<Link to="/services/$slug" params={{ slug: serviceSlugs[s.id] ?? s.id }} className="mt-6 inline-flex items-center gap-2 text-sm font-bold text-primary">Explore service <ArrowUpRight className="size-4" /></Link></div>)}</div>;
+}
+export function ProjectGrid({ filter = "all", limit }: { filter?: string; limit?: number }) {
+  const filtered = projects.filter((p) => filter === "all" || p.category.toLowerCase() === filter);
+  const list = limit ? filtered.slice(0, limit) : filtered;
+  return <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">{list.map((p) => <MotionCard key={p.id} className="overflow-hidden border rounded-lg bg-card"><Link to="/projects/$slug" params={{ slug: p.id }} aria-label={`Read ${p.title}`}><img src={p.image} width={1280} height={832} loading="lazy" alt={p.title} className="w-full aspect-[16/10] object-cover" /></Link><div className="p-6"><div className="flex gap-2 mb-4"><Badge variant="secondary">{p.category}</Badge><Badge variant="outline">Sample project</Badge></div><h3 className="text-lg font-bold"><Link to="/projects/$slug" params={{ slug: p.id }}>{p.title}</Link></h3><p className="mt-3 text-sm leading-6 text-muted-foreground">{p.summary}</p><Link to="/projects/$slug" params={{ slug: p.id }} className="mt-5 inline-flex items-center gap-2 text-sm text-primary font-semibold">Case study <ArrowUpRight className="size-4" /></Link></div></MotionCard>)}</div>;
+}
