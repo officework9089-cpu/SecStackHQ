@@ -6,6 +6,7 @@ const valid = {
   name: "Asif Raza",
   email: "asif@example.com",
   subject: "New website",
+  company: "SecStackHQ",
   service: "Web Development",
   message: "We need a secure company website.",
 };
