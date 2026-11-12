@@ -16,7 +16,7 @@
 - Visual effects (glass, glowing borders, gradients, grid) are `@utility` classes in `src/styles.css`; components use those plus semantic color tokens only.
 - Contact form validation rules live in `src/lib/contact-schema.ts` (zod) and are covered by `src/test/contact-schema.test.ts`.
 - Platform content and sample plans live in data modules; shared service IDs connect tools, service pages and inquiry handoffs.
-- AI uses one session-only conversation by default after skipped history choices; AI Elements render parts and the SDK transport consumes UI-message streams.
+- AI Elements render message parts and the SDK transport consumes UI-message streams; conversation storage choices are pending user confirmation.
 - Keep live gateway helpers under src/server/ai and use per-request providers; server routes stream AI and server functions save private inquiries.
 - Usage windows and gateway blocks persist privately in Cloud; no browser-only or in-memory server counters protect paid calls.
 - 3D modules are lazy-loaded behind ClientOnly with local lighting; semantic CSS tokens supply material colors.

@@ -15,7 +15,8 @@ export const Route = createFileRoute("/api/ai")({ server: { handlers: { POST: as
     if (last.length > 2000) return Response.json({ message: "Keep your message under 2,000 characters." }, { status: 400 });
     const key = process.env['LOVABLE_API_KEY'];
     const messages: UIMessage[] = parsed.data.messages;
-    if (parsed.data.mode === "demo" || !key) {
+    if (parsed.data.mode === "live" && !key) return Response.json({ message: "Live AI is not configured. Demo mode remains available." }, { status: 401 });
+    if (parsed.data.mode === "demo") {
       const { createUIMessageStream, createUIMessageStreamResponse } = await import("ai");
       const { mockAnswer } = await import("@/features/ai/mock");
       const text = mockAnswer(last);
@@ -36,6 +37,6 @@ export const Route = createFileRoute("/api/ai")({ server: { handlers: { POST: as
     return await call.response(messages);
   } catch (error) {
     if (request.signal.aborted) return new Response(null, { status: 499 });
-    return Response.json({ message: error instanceof z.ZodError ? "Invalid input." : error instanceof Error ? error.message : "AI request failed." }, { status: 500 });
+    return Response.json({ message: error instanceof z.ZodError || error instanceof SyntaxError ? "Invalid input." : error instanceof Error ? error.message : "AI request failed." }, { status: error instanceof SyntaxError || error instanceof z.ZodError ? 400 : 500 });
   }
 } } } });

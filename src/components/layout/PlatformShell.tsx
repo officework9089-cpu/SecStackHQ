@@ -39,10 +39,10 @@ export function PlatformShell({ children }: { children: ReactNode }) {
     <a href="#main" className="sr-only focus:not-sr-only focus:fixed focus:top-3 focus:left-3 z-[100] bg-primary text-primary-foreground p-3 rounded-md">Skip to content</a>
     <ScrollProgress />
     <header className="sticky top-0 z-40 border-b bg-background/90 backdrop-blur-xl">
-      <nav aria-label="Main navigation" className="mx-auto flex h-20 max-w-7xl items-center justify-between gap-4 px-5 sm:px-8">
-        <Link to="/" aria-label="SecStackHQ home"><Logo /></Link>
+      <nav aria-label="Main navigation" className="mx-auto flex h-20 max-w-7xl items-center justify-between gap-1 px-3 sm:gap-4 sm:px-8">
+        <Link to="/" aria-label="SecStackHQ home" className="min-w-0"><Logo className="gap-1.5 sm:gap-2.5" /></Link>
         <div className="hidden lg:flex items-center gap-6">{pageLinks.filter((p) => p.to !== "/contact").map((p) => <Link key={p.to} to={p.to} activeOptions={{ exact: p.to === "/" }} className="text-sm font-semibold text-muted-foreground hover:text-primary" activeProps={{ className: "text-primary" }}>{p.label}{p.to === "/ai-lab" && <span className="ml-1.5 inline-block size-1.5 rounded-full bg-success" />}</Link>)}</div>
-        <div className="flex gap-1.5 items-center">
+        <div className="flex shrink-0 gap-0 sm:gap-1.5 items-center">
           <Button variant="ghost" size="icon-sm" aria-label="Open command palette" title="Quick navigation" onClick={() => setCommandOpen(true)}><Command /></Button>
           <Button variant="ghost" size="icon-sm" aria-label="Toggle theme" title="Toggle light/dark theme" onClick={() => setTheme(document.documentElement.classList.contains("dark") ? "light" : "dark")}>{theme === "dark" ? <Sun /> : <Moon />}</Button>
           <Button asChild className="hidden sm:inline-flex h-11"><Link to="/contact">Let's talk <ArrowUpRight /></Link></Button>
