@@ -6,7 +6,7 @@ import type { Group } from "three";
 function Stack({ colors, reduced }: { colors: string[]; reduced: boolean }) {
   const ref = useRef<Group>(null);
   useFrame((state,delta) => { if (!ref.current || reduced) return; ref.current.rotation.y += Math.min(delta,0.05)*0.12; ref.current.rotation.x = -0.25 + state.pointer.y * 0.08; });
-  return <group ref={ref} rotation={[-0.25,0.5,0.05]}>{[0,1,2].map((i) => <RoundedBox key={i} args={[2.2,0.28,1.5]} radius={0.1} smoothness={3} position={[0,(i-1)*0.55,0]}><meshStandardMaterial color={colors[i]} metalness={0.45} roughness={0.28} /></RoundedBox>)}</group>;
+  return <group ref={ref} rotation={[-0.25,0.5,0.05]}>{colors.map((color,i) => <RoundedBox key={i} args={[2.2,0.28,1.5]} radius={0.1} smoothness={3} position={[0,(i-1)*0.55,0]}><meshStandardMaterial color={color} metalness={0.45} roughness={0.28} /></RoundedBox>)}</group>;
 }
 export default function BrandScene() {
   const [colors,setColors] = useState<string[]>([]); const reduced = useReducedMotion();
