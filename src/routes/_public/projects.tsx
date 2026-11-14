@@ -55,16 +55,6 @@ function AllProjectsPage() {
       {/* Modern Hero Banner */}
       <section className="relative overflow-hidden border-b border-border/60 min-h-[75vh] pt-28 sm:pt-36 pb-16 sm:pb-24 flex flex-col justify-between">
         
-        {/* Background Image & Gradient Overlay */}
-        <div aria-hidden="true" className="absolute inset-0 -z-30 overflow-hidden">
-          <img
-            src={AboutHero}
-            alt="SecStackHQ Infrastructure"
-            className="size-full object-cover object-center dark:opacity-20 scale-105"
-          />
-          {/* Gradient fade to blend nicely with the page background */}
-          {/* <div className="absolute inset-0 bg-linear-to-b from-background/40 via-background/80 to-background" /> */}
-        </div>
 
         {/* Ambient Category-Reactive Glow Orb */}
         <motion.div

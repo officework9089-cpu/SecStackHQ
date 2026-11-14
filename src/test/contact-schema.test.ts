@@ -12,7 +12,7 @@ const valid = {
 };
 
 describe("contact form rules", () => {
-  it("accepts a complete submission", () => {
+  it("accepts a complete ubmission", () => {
     expect(contactSchema.safeParse(valid).success).toBe(true);
   });
 

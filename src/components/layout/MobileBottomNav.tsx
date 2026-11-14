@@ -1,3 +1,4 @@
+
 import {
   BottomNavigation,
   BottomNavigationHighlight,
@@ -15,63 +16,30 @@ import {
 } from "lucide-react";
 
 import { useLocation, useNavigate } from "@tanstack/react-router";
-import { useActiveSection, scrollToSection } from "@/hooks/use-active-section";
 
 const ITEMS = [
-  { value: "home", label: "Home", Icon: Home },
-  { value: "about", label: "About", Icon: UserRound },
-  { value: "projects", label: "Projects", Icon: FolderKanban },
-  { value: "services", label: "Services", Icon: BriefcaseBusiness },
-  { value: "contact", label: "Contact", Icon: Mail },
+  { value: "home", label: "Home", Icon: Home, path: "/" },
+  { value: "about", label: "About", Icon: UserRound, path: "/about" },
+  { value: "projects", label: "Projects", Icon: FolderKanban, path: "/projects" },
+  { value: "services", label: "Services", Icon: BriefcaseBusiness, path: "/services" },
+  { value: "contact", label: "Contact", Icon: Mail, path: "/contact" },
 ];
 
-const sectionIds = ["home", "services", "contact"];
-
 export function MobileBottomNav() {
-  const activeSection = useActiveSection(sectionIds);
   const location = useLocation();
   const navigate = useNavigate();
 
-  const isHome =
-    location.pathname === "/" || location.pathname === "/_public/";
+  // Determine active tab using the current route only
+  const currentActive =
+    ITEMS.find((item) => item.path === location.pathname)?.value ?? "home";
 
-  // Determine the active tab based on the current route or visible homepage section
-  const currentActive = (() => {
-    if (location.pathname.startsWith("/about")) return "about";
-    if (location.pathname.startsWith("/projects")) return "projects";
-    return activeSection ?? "home";
-  })();
-
+  // Navigate directly to the selected page
   const go = (value: string) => {
-    if (value === "about") {
-      navigate({ to: "/about" });
-      return;
-    }
+    const selectedItem = ITEMS.find((item) => item.value === value);
 
-    if (value === "projects") {
-      navigate({ to: "/projects" });
-      return;
-    }
+    if (!selectedItem) return;
 
-    if (value === "home") {
-      if (!isHome) {
-        navigate({ to: "/" }).then(() => {
-          window.scrollTo({ top: 0, behavior: "smooth" });
-        });
-      } else {
-        scrollToSection("home");
-      }
-      return;
-    }
-
-    // Section links ("services", "contact")
-    if (!isHome) {
-      navigate({ to: "/" }).then(() => {
-        setTimeout(() => scrollToSection(value), 120);
-      });
-    } else {
-      scrollToSection(value);
-    }
+    navigate({ to: selectedItem.path });
   };
 
   return (
@@ -92,6 +60,9 @@ export function MobileBottomNav() {
                     <button
                       type="button"
                       aria-label={label}
+                      aria-current={
+                        currentActive === value ? "page" : undefined
+                      }
                       className="relative z-10 flex h-[3.75rem] w-full flex-col items-center justify-center gap-1 rounded-full text-muted-foreground outline-none transition-colors hover:text-foreground focus-visible:ring-2 focus-visible:ring-primary data-[state=active]:text-primary"
                     >
                       <Icon

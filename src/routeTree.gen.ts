@@ -9,18 +9,6 @@
 // Additionally, you should also exclude this file from your linter and/or formatter to prevent it from being checked or modified.
 
 import { Route as rootRouteImport } from './routes/__root'
-<<<<<<< HEAD
-import { Route as IndexRouteImport } from './routes/index'
-import { Route as AboutRouteImport } from './routes/about'
-import { Route as AiLabRouteImport } from './routes/ai-lab'
-import { Route as ContactRouteImport } from './routes/contact'
-import { Route as PricingRouteImport } from './routes/pricing'
-import { Route as ApiAiRouteImport } from './routes/api.ai'
-import { Route as ProjectsIndexRouteImport } from './routes/projects.index'
-import { Route as ProjectsSlugRouteImport } from './routes/projects.$slug'
-import { Route as ServicesIndexRouteImport } from './routes/services.index'
-import { Route as ServicesSlugRouteImport } from './routes/services.$slug'
-=======
 import { Route as PublicRouteRouteImport } from './routes/_public/route'
 import { Route as PublicIndexRouteImport } from './routes/_public/index'
 import { Route as PublicAboutRouteImport } from './routes/_public/about'
@@ -33,7 +21,6 @@ import { Route as AdminProtectedIndexRouteImport } from './routes/admin/_protect
 import { Route as AdminProtectedContactsRouteImport } from './routes/admin/_protected/contacts'
 import { Route as AdminProtectedProjectsRouteImport } from './routes/admin/_protected/projects'
 import { Route as AdminProtectedSettingsRouteImport } from './routes/admin/_protected/settings'
->>>>>>> 9fdda5a (update inages certificate)
 
 const PublicRouteRoute = PublicRouteRouteImport.update({
   id: '/_public',
@@ -69,90 +56,6 @@ const AdminProtectedRouteRoute = AdminProtectedRouteRouteImport.update({
   path: '/admin',
   getParentRoute: () => rootRouteImport,
 } as any)
-<<<<<<< HEAD
-const AboutRoute = AboutRouteImport.update({
-  id: '/about',
-  path: '/about',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const AiLabRoute = AiLabRouteImport.update({
-  id: '/ai-lab',
-  path: '/ai-lab',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const ContactRoute = ContactRouteImport.update({
-  id: '/contact',
-  path: '/contact',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const PricingRoute = PricingRouteImport.update({
-  id: '/pricing',
-  path: '/pricing',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const ApiAiRoute = ApiAiRouteImport.update({
-  id: '/api/ai',
-  path: '/api/ai',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const ProjectsIndexRoute = ProjectsIndexRouteImport.update({
-  id: '/projects/',
-  path: '/projects/',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const ProjectsSlugRoute = ProjectsSlugRouteImport.update({
-  id: '/projects/$slug',
-  path: '/projects/$slug',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const ServicesIndexRoute = ServicesIndexRouteImport.update({
-  id: '/services/',
-  path: '/services/',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const ServicesSlugRoute = ServicesSlugRouteImport.update({
-  id: '/services/$slug',
-  path: '/services/$slug',
-  getParentRoute: () => rootRouteImport,
-} as any)
-
-export interface FileRoutesByFullPath {
-  '/': typeof IndexRoute
-  '/about': typeof AboutRoute
-  '/ai-lab': typeof AiLabRoute
-  '/contact': typeof ContactRoute
-  '/pricing': typeof PricingRoute
-  '/api/ai': typeof ApiAiRoute
-  '/projects/$slug': typeof ProjectsSlugRoute
-  '/services/$slug': typeof ServicesSlugRoute
-  '/projects/': typeof ProjectsIndexRoute
-  '/services/': typeof ServicesIndexRoute
-}
-export interface FileRoutesByTo {
-  '/': typeof IndexRoute
-  '/about': typeof AboutRoute
-  '/ai-lab': typeof AiLabRoute
-  '/contact': typeof ContactRoute
-  '/pricing': typeof PricingRoute
-  '/api/ai': typeof ApiAiRoute
-  '/projects/$slug': typeof ProjectsSlugRoute
-  '/services/$slug': typeof ServicesSlugRoute
-  '/projects': typeof ProjectsIndexRoute
-  '/services': typeof ServicesIndexRoute
-}
-export interface FileRoutesById {
-  __root__: typeof rootRouteImport
-  '/': typeof IndexRoute
-  '/about': typeof AboutRoute
-  '/ai-lab': typeof AiLabRoute
-  '/contact': typeof ContactRoute
-  '/pricing': typeof PricingRoute
-  '/api/ai': typeof ApiAiRoute
-  '/projects/$slug': typeof ProjectsSlugRoute
-  '/services/$slug': typeof ServicesSlugRoute
-  '/projects/': typeof ProjectsIndexRoute
-  '/services/': typeof ServicesIndexRoute
-=======
 const AdminLoginRoute = AdminLoginRouteImport.update({
   id: '/admin/login',
   path: '/admin/login',
@@ -218,60 +121,11 @@ export interface FileRoutesById {
   '/admin/_protected/projects': typeof AdminProtectedProjectsRoute
   '/admin/_protected/settings': typeof AdminProtectedSettingsRoute
   '/admin/_protected/': typeof AdminProtectedIndexRoute
->>>>>>> 9fdda5a (update inages certificate)
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
   fullPaths:
     | '/'
-<<<<<<< HEAD
-    | '/about'
-    | '/ai-lab'
-    | '/contact'
-    | '/pricing'
-    | '/api/ai'
-    | '/projects/$slug'
-    | '/services/$slug'
-    | '/projects/'
-    | '/services/'
-  fileRoutesByTo: FileRoutesByTo
-  to:
-    | '/'
-    | '/about'
-    | '/ai-lab'
-    | '/contact'
-    | '/pricing'
-    | '/api/ai'
-    | '/projects/$slug'
-    | '/services/$slug'
-    | '/projects'
-    | '/services'
-  id:
-    | '__root__'
-    | '/'
-    | '/about'
-    | '/ai-lab'
-    | '/contact'
-    | '/pricing'
-    | '/api/ai'
-    | '/projects/$slug'
-    | '/services/$slug'
-    | '/projects/'
-    | '/services/'
-  fileRoutesById: FileRoutesById
-}
-export interface RootRouteChildren {
-  IndexRoute: typeof IndexRoute
-  AboutRoute: typeof AboutRoute
-  AiLabRoute: typeof AiLabRoute
-  ContactRoute: typeof ContactRoute
-  PricingRoute: typeof PricingRoute
-  ApiAiRoute: typeof ApiAiRoute
-  ProjectsSlugRoute: typeof ProjectsSlugRoute
-  ServicesSlugRoute: typeof ServicesSlugRoute
-  ProjectsIndexRoute: typeof ProjectsIndexRoute
-  ServicesIndexRoute: typeof ServicesIndexRoute
-=======
     | '/admin'
     | '/about'
     | '/contact'
@@ -314,7 +168,6 @@ export interface RootRouteChildren {
   PublicRouteRoute: typeof PublicRouteRouteWithChildren
   AdminProtectedRouteRoute: typeof AdminProtectedRouteRouteWithChildren
   AdminLoginRoute: typeof AdminLoginRoute
->>>>>>> 9fdda5a (update inages certificate)
 }
 
 declare module '@tanstack/react-router' {
@@ -368,70 +221,6 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AdminProtectedRouteRouteImport
       parentRoute: typeof rootRouteImport
     }
-<<<<<<< HEAD
-    '/about': {
-      id: '/about'
-      path: '/about'
-      fullPath: '/about'
-      preLoaderRoute: typeof AboutRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/ai-lab': {
-      id: '/ai-lab'
-      path: '/ai-lab'
-      fullPath: '/ai-lab'
-      preLoaderRoute: typeof AiLabRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/contact': {
-      id: '/contact'
-      path: '/contact'
-      fullPath: '/contact'
-      preLoaderRoute: typeof ContactRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/pricing': {
-      id: '/pricing'
-      path: '/pricing'
-      fullPath: '/pricing'
-      preLoaderRoute: typeof PricingRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/api/ai': {
-      id: '/api/ai'
-      path: '/api/ai'
-      fullPath: '/api/ai'
-      preLoaderRoute: typeof ApiAiRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/projects/': {
-      id: '/projects/'
-      path: '/projects'
-      fullPath: '/projects/'
-      preLoaderRoute: typeof ProjectsIndexRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/projects/$slug': {
-      id: '/projects/$slug'
-      path: '/projects/$slug'
-      fullPath: '/projects/$slug'
-      preLoaderRoute: typeof ProjectsSlugRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/services/': {
-      id: '/services/'
-      path: '/services'
-      fullPath: '/services/'
-      preLoaderRoute: typeof ServicesIndexRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/services/$slug': {
-      id: '/services/$slug'
-      path: '/services/$slug'
-      fullPath: '/services/$slug'
-      preLoaderRoute: typeof ServicesSlugRouteImport
-      parentRoute: typeof rootRouteImport
-=======
     '/admin/login': {
       id: '/admin/login'
       path: '/admin/login'
@@ -466,7 +255,6 @@ declare module '@tanstack/react-router' {
       fullPath: '/admin/settings'
       preLoaderRoute: typeof AdminProtectedSettingsRouteImport
       parentRoute: typeof AdminProtectedRouteRoute
->>>>>>> 9fdda5a (update inages certificate)
     }
   }
 }
@@ -509,22 +297,9 @@ const AdminProtectedRouteRouteWithChildren =
   AdminProtectedRouteRoute._addFileChildren(AdminProtectedRouteRouteChildren)
 
 const rootRouteChildren: RootRouteChildren = {
-<<<<<<< HEAD
-  IndexRoute: IndexRoute,
-  AboutRoute: AboutRoute,
-  AiLabRoute: AiLabRoute,
-  ContactRoute: ContactRoute,
-  PricingRoute: PricingRoute,
-  ApiAiRoute: ApiAiRoute,
-  ProjectsSlugRoute: ProjectsSlugRoute,
-  ServicesSlugRoute: ServicesSlugRoute,
-  ProjectsIndexRoute: ProjectsIndexRoute,
-  ServicesIndexRoute: ServicesIndexRoute,
-=======
   PublicRouteRoute: PublicRouteRouteWithChildren,
   AdminProtectedRouteRoute: AdminProtectedRouteRouteWithChildren,
   AdminLoginRoute: AdminLoginRoute,
->>>>>>> 9fdda5a (update inages certificate)
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)

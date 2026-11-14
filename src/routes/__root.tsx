@@ -13,7 +13,6 @@ import { useEffect, type ReactNode } from "react";
 import appCss from "../styles.css?url";
 import { reportLovableError } from "../lib/lovable-error-reporting";
 import { Toaster } from "@/components/ui/sonner";
-import { PlatformShell } from "@/components/layout/PlatformShell";
 
 function NotFoundComponent() {
   return (
@@ -131,7 +130,7 @@ function RootComponent() {
   return (
     <QueryClientProvider client={queryClient}>
       {/* Required: nested routes render here. Removing <Outlet /> breaks all child routes. */}
-      <PlatformShell><Outlet /></PlatformShell>
+      <Outlet />
       <Toaster position="bottom-center" richColors />
     </QueryClientProvider>
   );
