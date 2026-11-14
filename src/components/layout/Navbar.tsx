@@ -1,35 +1,36 @@
-
 import {
   AnimatePresence,
   motion,
   useMotionValueEvent,
   useScroll,
 } from "motion/react";
-
 import {
   Command,
   ComputerIcon,
   Moon,
   Sun,
 } from "lucide-react";
-
 import {
   ThemeToggler,
   type Resolved,
   type ThemeSelection,
 } from "@animate-ui/react/primitives/effects/theme-toggler";
-
 import { useState } from "react";
+import { useLocation, useNavigate } from "@tanstack/react-router";
 
 import { Logo } from "@/components/common/Logo";
 import { MagneticButton } from "@/components/motion";
 import { Button } from "@/components/ui/button";
-import { navLinks } from "@/data/site";
-import { scrollToSection, useActiveSection } from "@/hooks/use-active-section";
 import { cn } from "@/lib/utils/calculator";
 import { MobileBottomNav } from "@/components/layout/MobileBottomNav";
 
-const ids = navLinks.map((l) => l.id);
+const pageNavLinks = [
+  { id: "home", label: "Home", to: "/" },
+  { id: "about", label: "About", to: "/about" },
+  { id: "projects", label: "Projects", to: "/projects" },
+  { id: "services", label: "Services", to: "/services" },
+  { id: "contact", label: "Contact", to: "/contact" },
+];
 
 export function Navbar({
   theme,
@@ -40,8 +41,9 @@ export function Navbar({
   onToggleTheme: () => void;
   onOpenCommand: () => void;
 }) {
-  const active = useActiveSection(ids);
   const [scrolled, setScrolled] = useState(false);
+  const location = useLocation();
+  const navigate = useNavigate();
 
   const { scrollY } = useScroll();
 
@@ -59,10 +61,6 @@ export function Navbar({
     light: Sun,
     dark: Moon,
     system: ComputerIcon,
-  };
-
-  const go = (id: string) => {
-    scrollToSection(id);
   };
 
   return (
@@ -84,69 +82,67 @@ export function Navbar({
           )}
         >
           {/* Logo */}
-          <a
-            href="#home"
-            onClick={(e) => {
-              e.preventDefault();
-              go("home");
-            }}
-            className="min-w-0"
+          <button
+            type="button"
+            onClick={() => navigate({ to: "/" })}
+            className="min-w-0 text-left cursor-pointer bg-transparent border-none p-0"
             aria-label="SecStackHQ home"
           >
             <Logo />
-          </a>
+          </button>
 
-          {/* Desktop Navigation */}
+          {/* Desktop Navigation - Pages Only */}
           <ul className="hidden items-center justify-center gap-1 lg:flex">
-            {navLinks.map((l) => (
-              <li key={l.id}>
-                <a
-                  href={`#${l.id}`}
-                  onClick={(e) => {
-                    e.preventDefault();
-                    go(l.id);
-                  }}
-                  aria-current={
-                    active === l.id ? "page" : undefined
-                  }
-                  className={cn(
-                    "relative rounded-full px-4 py-2 text-sm font-semibold transition-colors",
-                    active === l.id
-                      ? "text-primary"
-                      : "text-muted-foreground hover:text-foreground",
-                  )}
-                >
-                  {active === l.id && (
-                    <motion.span
-                      layoutId="nav-pill"
-                      className="bg-accent absolute inset-0 -z-10 rounded-full"
-                      transition={{
-                        type: "spring",
-                        stiffness: 380,
-                        damping: 30,
-                      }}
-                    />
-                  )}
-                  {l.label}
-                </a>
-              </li>
-            ))}
+            {pageNavLinks.map((l) => {
+              const isActive =
+                location.pathname === l.to ||
+                (l.to === "/" && location.pathname === "/_public/");
+
+              return (
+                <li key={l.id}>
+                  <button
+                    type="button"
+                    onClick={() => navigate({ to: l.to })}
+                    aria-current={isActive ? "page" : undefined}
+                    className={cn(
+                      "relative rounded-full px-4 py-2 text-sm font-semibold transition-colors cursor-pointer",
+                      isActive
+                        ? "text-primary"
+                        : "text-muted-foreground hover:text-foreground",
+                    )}
+                  >
+                    {isActive && (
+                      <motion.span
+                        layoutId="nav-pill"
+                        className="bg-accent absolute inset-0 -z-10 rounded-full"
+                        transition={{
+                          type: "spring",
+                          stiffness: 380,
+                          damping: 30,
+                        }}
+                      />
+                    )}
+                    {l.label}
+                  </button>
+                </li>
+              );
+            })}
           </ul>
 
           {/* Actions */}
           <div className="flex shrink-0 items-center justify-end gap-2">
-
             {/* Desktop Command Button */}
             <button
+              type="button"
               onClick={onOpenCommand}
-              className="hidden items-center gap-1.5 rounded-full px-3 py-2 text-xs font-semibold text-muted-foreground transition-colors hover:bg-accent hover:text-foreground md:flex"
+              className="hidden items-center gap-1.5 rounded-full px-3 py-2 text-xs font-semibold text-muted-foreground transition-colors hover:bg-accent hover:text-foreground md:flex cursor-pointer"
               aria-label="Open quick navigation"
             >
               <Command className="size-3.5" />
               K
             </button>
 
-            {/* Theme Toggle - Desktop and Mobile */}
+            {/* Theme Toggle */}
             <ThemeToggler
               theme={theme as ThemeSelection}
               resolvedTheme={theme as Resolved}
@@ -160,7 +156,7 @@ export function Navbar({
                 <Button
                   variant="ghost"
                   size="icon"
-                  className="size-10 rounded-full"
+                  className="size-10 rounded-full cursor-pointer"
                   aria-label={`Theme: ${effective}. Switch to ${NEXT[effective]}`}
                   onClick={() => toggleTheme(NEXT[effective])}
                 >
@@ -177,12 +173,11 @@ export function Navbar({
               <Button
                 variant="hero"
                 size="lg"
-                onClick={() => go("contact")}
+                onClick={() => navigate({ to: "/contact" })}
               >
                 Start a Project
               </Button>
             </MagneticButton>
-
           </div>
         </nav>
       </motion.header>

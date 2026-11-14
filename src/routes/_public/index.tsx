@@ -1,3 +1,4 @@
+<<<<<<< HEAD:src/routes/index.tsx
 import { createFileRoute, Link, ClientOnly } from "@tanstack/react-router";
 import { lazy, Suspense } from "react";
 import { ArrowUpRight, ShieldCheck, Code2, TrendingUp } from "lucide-react";
@@ -27,3 +28,76 @@ function Home() { return <>
   <PageSection><div className="flex flex-col sm:flex-row justify-between gap-6 sm:items-end mb-10"><div><p className="text-xs text-primary font-bold mb-4">THE POSSIBILITIES</p><h2 className="text-3xl sm:text-4xl font-bold">Ideas brought to life.</h2><p className="text-sm text-muted-foreground mt-4">Illustrative case studies · sample outcomes</p></div><Link to="/projects" className="text-primary inline-flex gap-2 items-center text-sm font-semibold">Explore projects <ArrowUpRight className="size-4" /></Link></div><ProjectGrid limit={3} /></PageSection>
   <section className="bg-primary text-primary-foreground"><PageSection><div className="flex flex-col md:flex-row md:items-center justify-between gap-8"><div><p className="text-xs font-bold mb-5">YOUR NEXT CHAPTER</p><h2 className="text-3xl sm:text-4xl font-bold">Let's build something<br />worth believing in.</h2></div><Button asChild variant="secondary" size="xl"><Link to="/contact">Start a conversation <ArrowUpRight /></Link></Button></div></PageSection></section>
 </>; }
+=======
+import { createFileRoute } from "@tanstack/react-router";
+import { MotionConfig } from "motion/react";
+import { useState } from "react";
+
+import { CommandMenu } from "@/components/layout/CommandMenu";
+import { Footer } from "@/components/layout/Footer";
+import { Navbar } from "@/components/layout/Navbar";
+import { PageTransition, ScrollProgress } from "@/components/motion";
+import { useTheme } from "@/hooks/use-theme";
+import { About } from "@/sections/About/About";
+// import { Contact } from "@/sections/Contact/Contact";
+import { Hero } from "@/sections/Hero/Hero";
+import { Process } from "@/sections/Process/Process";
+import { Projects } from "@/sections/Projects/Projects";
+import { Services } from "@/sections/Services/Services";
+import { Testimonials } from "@/sections/Testimonials/Testimonials";
+import { WhyUs } from "@/sections/WhyUs/WhyUs";
+
+const title = "SecStackHQ — Web Development, Cybersecurity & Digital Growth";
+const description =
+  "SecStackHQ builds fast websites, runs penetration tests, designs brands and grows businesses with SEO and social media. Develop. Secure. Grow.";
+
+export const Route = createFileRoute("/_public/")({
+  head: () => ({
+    meta: [
+      { title },
+      { name: "description", content: description },
+      { property: "og:title", content: title },
+      { property: "og:description", content: description },
+      { property: "og:type", content: "website" },
+      { property: "og:url", content: "/" },
+      { name: "twitter:card", content: "summary_large_image" },
+      { name: "twitter:title", content: title },
+      { name: "twitter:description", content: description },
+    ],
+    links: [{ rel: "canonical", href: "/" }],
+  }),
+  component: Index,
+});
+
+function Index() {
+  const { theme, toggle } = useTheme();
+  const [cmdOpen, setCmdOpen] = useState(false);
+
+  return (
+    <MotionConfig reducedMotion="user">
+      <a
+        href="#main"
+        className="bg-primary text-primary-foreground sr-only z-[80] rounded-full px-4 py-2 focus:not-sr-only focus:fixed focus:top-4 focus:left-4"
+      >
+        Skip to content
+      </a>
+      <ScrollProgress />
+      <Navbar theme={theme} onToggleTheme={toggle} onOpenCommand={() => setCmdOpen(true)} />
+      <CommandMenu open={cmdOpen} onOpenChange={setCmdOpen} />
+      <PageTransition>
+        <main id="main" className="overflow-x-clip">
+          <Hero />
+          <About />
+          <Services />
+          <Projects />
+          {/* <WhyUs />
+          <Process /> */}
+          <Testimonials />
+          {/* <Contact /> */}
+        </main>
+        <Footer />
+      </PageTransition>
+    </MotionConfig>
+  );
+}
+>>>>>>> 9fdda5a (update inages certificate):src/routes/_public/index.tsx

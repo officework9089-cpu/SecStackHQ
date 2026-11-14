@@ -1,94 +1,45 @@
-import { Compass, Eye, ShieldCheck, Target } from "lucide-react";
-
-import { Counter } from "@/components/common/Counter";
-import { Section, SectionHeading } from "@/components/common/SectionHeading";
-import { GradientText, MotionCard, SlideIn, StaggerContainer, TiltCard } from "@/components/motion";
-import { stats } from "@/data/site";
-import { FadeIn } from "@/components/motion/FadeIn";
-import AboutUs from "@/assets/project-security.jpg"
-
-const pillars = [
-  {
-    icon: Compass,
-    title: "Our philosophy",
-    text: "Great digital products sit at the intersection of engineering, security and design. We never treat them separately.",
-  },
-  {
-    icon: Target,
-    title: "Our mission",
-    text: "To help ambitious businesses launch faster, stay protected, and grow with technology they can trust.",
-  },
-  {
-    icon: Eye,
-    title: "Our vision",
-    text: "A web where every brand — from startup to enterprise — has world-class, secure digital infrastructure.",
-  },
+const brandLogos = [
+  { name: "FinVault", tag: "FINTECH" },
+  { name: "CloudScale", tag: "CLOUD" },
+  { name: "Aether Labs", tag: "AI / ML" },
+  { name: "NovaPay", tag: "PAYMENTS" },
+  { name: "KiteWorks", tag: "SAAS" },
+  { name: "CyberGuard", tag: "SECURITY" },
+  { name: "NexusAI", tag: "INFRASTRUCTURE" },
 ];
 
 export function About() {
   return (
-    <Section id="about">
-      <div className="grid items-start gap-12 lg:grid-cols-[1fr_1.1fr] lg:gap-16">
-        <div>
-          <SectionHeading
-            align="left"
-            eyebrow="About SecStackHQ"
-            title={
-              <>
-                One team to <GradientText>develop, secure</GradientText> and grow your brand.
-              </>
-            }
-            description="SecStackHQ is a technology and digital growth studio. We combine full-stack developers, ethical hackers, designers and marketers under one roof — so your website is beautiful, bulletproof and built to perform."
-            className="mb-10 md:mb-12"
-          />
+    <section
+      id="about"
+      aria-label="Trusted brands and partners"
+      className="relative border-y border-border/60 bg-card/30 py-8 sm:py-10 backdrop-blur-sm"
+    >
+      {/* <div className="mx-auto max-w-7xl px-6 lg:px-12">
+        <p className="mb-6 text-center text-xs font-bold tracking-widest text-muted-foreground uppercase">
+          Trusted by innovative teams &amp; fast-growing brands
+        </p>
+      </div> */}
 
-        </div>
-
-        <div className="items-stretch mb-20">
-          {/* Visual Showcase (7 cols) */}
-          <div className="">
-            <FadeIn direction="right" className="h-full">
-              <div className="relative rounded-2xl overflow-hidden border border-slate-200 dark:border-slate-800 shadow-xl h-full group bg-slate-950">
-                <img
-                  src={AboutUs}
-                  alt="SecStackHQ Cyber Architecture and Cloud Engineering Facility"
-                  className="w-full h-80 object-cover object-center group-hover:scale-105 transition-transform duration-700 opacity-90"
-                  referrerPolicy="no-referrer"
-                />
-                <div className="absolute inset-0 bg-gradient-to-t from-slate-950/90 via-slate-950/30 to-transparent" />
-                <div className="absolute bottom-6 left-6 right-6 text-white">
-                  <div className="text-xs font-mono uppercase tracking-widest text-cyan-400 mb-1">
-                    Defensive Node Architecture
-                  </div>
-                  <h3 className="text-xl font-bold">Impenetrable Zero-Trust Web Systems</h3>
-                  <p className="text-xs text-slate-300 mt-1 max-w-md">
-                    Every web application built by our team undergoes simulated attack vectors before deployment.
-                  </p>
-                </div>
-              </div>
-            </FadeIn>
-          </div>
-
+      {/* Edge-faded Infinite Marquee */}
+      <div className="relative mx-auto w-full max-w-7xl overflow-hidden [mask-image:linear-gradient(to_right,transparent,black_12%,black_88%,transparent)]">
+        <div className="animate-marquee flex w-max items-center gap-6 py-1">
+          {[...brandLogos, ...brandLogos, ...brandLogos].map((brand, idx) => (
+            <div
+              key={`${brand.name}-${idx}`}
+              className="glass flex items-center gap-3 rounded-2xl border border-border/60 px-6 py-3.5 transition-colors hover:border-[#2f6bff]/50"
+            >
+              <span className="size-2 rounded-full bg-[#2f6bff]" />
+              <span className="font-['Sora'] text-base font-bold tracking-tight text-foreground/90">
+                {brand.name}
+              </span>
+              <span className="rounded-md bg-muted px-2 py-0.5 font-mono text-[10px] font-semibold tracking-wider text-muted-foreground">
+                {brand.tag}
+              </span>
+            </div>
+          ))}
         </div>
       </div>
-
-      <StaggerContainer className="grid grid-cols-2 gap-3 sm:gap-4 lg:grid-cols-4">
-        {stats.map((s) => (
-          <MotionCard
-            key={s.label}
-            className="glass shadow-depth flex min-w-0 flex-col justify-center rounded-2xl p-3 text-center sm:p-5 lg:p-6"
-          >
-            <div className="font-display text-gradient text-2xl font-extrabold sm:text-3xl lg:text-4xl">
-              <Counter value={s.value} suffix={s.suffix} />
-            </div>
-
-            <p className="text-muted-foreground mt-1 text-xs font-medium sm:text-sm">
-              {s.label}
-            </p>
-          </MotionCard>
-        ))}
-      </StaggerContainer>
-
-    </Section>
+    </section>
   );
 }

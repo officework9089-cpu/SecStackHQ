@@ -38,7 +38,7 @@ export function Hero() {
 
     return () => observer.disconnect();
   }, []);
-const heroBackground = resolvedTheme === "dark" ? heroDark : heroLight;
+  const heroBackground = resolvedTheme === "dark" ? heroDark : heroLight;
 
   const yText = useTransform(scrollYProgress, [0, 1], [0, 100]);
   const fade = useTransform(scrollYProgress, [0, 0.8], [1, 0]);
@@ -47,47 +47,46 @@ const heroBackground = resolvedTheme === "dark" ? heroDark : heroLight;
     <section
       ref={ref}
       id="home"
-      className="relative flex min-h-[100svh] items-center overflow-hidden pt-28 pb-16"
+      className="relative flex min-h-svh items-center overflow-hidden pt-28 pb-16"
     >
       {/* Background image */}
-      
-{/* Dynamic theme background */}
-<div className="absolute inset-0 z-0 overflow-hidden">
 
-  <AnimatePresence mode="sync">
-    <motion.img
-      key={heroBackground}
-      src={heroBackground}
-      alt=""
-      initial={{ opacity: 0 }}
-      animate={{ opacity: 1 }}
-      exit={{ opacity: 0 }}
-      transition={{ duration: 0.8, ease: "easeInOut" }}
-      className="absolute inset-0 h-full w-full object-cover object-center"
-    />
-  </AnimatePresence>
+      {/* Dynamic theme background */}
+      <div className="absolute inset-0 z-0 overflow-hidden">
 
-  {/* Theme-specific overlay */}
-  <div
-    className={`absolute inset-0 transition-colors duration-700 ${
-      resolvedTheme === "dark"
-        ? "bg-[#050816]/25"
-        : "bg-white/15"
-    }`}
-  />
+        <AnimatePresence mode="sync">
+          <motion.img
+            key={heroBackground}
+            src={heroBackground}
+            alt=""
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            transition={{ duration: 0.8, ease: "easeInOut" }}
+            className="absolute inset-0 h-full w-full object-cover object-center"
+          />
+        </AnimatePresence>
 
-  {/* Content readability gradient */}
-  <div className="absolute inset-0 bg-gradient-to-r from-background/70 via-background/20 to-transparent" />
+        {/* Theme-specific overlay */}
+        <div
+          className={`absolute inset-0 transition-colors duration-700 ${resolvedTheme === "dark"
+              ? "bg-[#050816]/25"
+              : "bg-white/15"
+            }`}
+        />
 
-  {/* Bottom fade */}
-  <div className="absolute inset-0 bg-gradient-to-t from-background/80 via-transparent to-background/10" />
+        {/* Content readability gradient */}
+        <div className="absolute inset-0 bg-gradient-to-r from-background/70 via-background/20 to-transparent" />
 
-  {/* Brand ambient glow */}
-  <div className="absolute right-0 top-1/4 h-96 w-96 rounded-full bg-blue-500/10 blur-[120px]" />
+        {/* Bottom fade */}
+        <div className="absolute inset-0 bg-gradient-to-t from-background/80 via-transparent to-background/10" />
 
-  <div className="absolute bottom-0 left-1/4 h-72 w-72 rounded-full bg-cyan-400/10 blur-[100px]" />
+        {/* Brand ambient glow */}
+        <div className="absolute right-0 top-1/4 h-96 w-96 rounded-full bg-blue-500/10 blur-[120px]" />
 
-</div>
+        <div className="absolute bottom-0 left-1/4 h-72 w-72 rounded-full bg-cyan-400/10 blur-[100px]" />
+
+      </div>
 
 
       {/* Existing background effects */}
@@ -103,7 +102,7 @@ const heroBackground = resolvedTheme === "dark" ? heroDark : heroLight;
           className="flex max-w-3xl flex-col items-start gap-7"
         >
           {/* Brand eyebrow */}
-          <motion.div
+          {/* <motion.div
             initial={{ opacity: 0, y: 16 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.6 }}
@@ -112,7 +111,7 @@ const heroBackground = resolvedTheme === "dark" ? heroDark : heroLight;
             DEVELOP <span className="px-2 text-cyan-400">•</span>
             SECURE <span className="px-2 text-violet-500">•</span>
             GROW
-          </motion.div>
+          </motion.div> */}
 
           {/* Main heading */}
           <h1 className="text-5xl font-extrabold leading-[1.05] tracking-tight sm:text-6xl lg:text-7xl xl:text-8xl">

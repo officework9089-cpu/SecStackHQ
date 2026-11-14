@@ -9,6 +9,7 @@
 // Additionally, you should also exclude this file from your linter and/or formatter to prevent it from being checked or modified.
 
 import { Route as rootRouteImport } from './routes/__root'
+<<<<<<< HEAD
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as AboutRouteImport } from './routes/about'
 import { Route as AiLabRouteImport } from './routes/ai-lab'
@@ -19,12 +20,56 @@ import { Route as ProjectsIndexRouteImport } from './routes/projects.index'
 import { Route as ProjectsSlugRouteImport } from './routes/projects.$slug'
 import { Route as ServicesIndexRouteImport } from './routes/services.index'
 import { Route as ServicesSlugRouteImport } from './routes/services.$slug'
+=======
+import { Route as PublicRouteRouteImport } from './routes/_public/route'
+import { Route as PublicIndexRouteImport } from './routes/_public/index'
+import { Route as PublicAboutRouteImport } from './routes/_public/about'
+import { Route as PublicContactRouteImport } from './routes/_public/contact'
+import { Route as PublicProjectsRouteImport } from './routes/_public/projects'
+import { Route as PublicServicesRouteImport } from './routes/_public/services'
+import { Route as AdminProtectedRouteRouteImport } from './routes/admin/_protected/route'
+import { Route as AdminLoginRouteImport } from './routes/admin/login'
+import { Route as AdminProtectedIndexRouteImport } from './routes/admin/_protected/index'
+import { Route as AdminProtectedContactsRouteImport } from './routes/admin/_protected/contacts'
+import { Route as AdminProtectedProjectsRouteImport } from './routes/admin/_protected/projects'
+import { Route as AdminProtectedSettingsRouteImport } from './routes/admin/_protected/settings'
+>>>>>>> 9fdda5a (update inages certificate)
 
-const IndexRoute = IndexRouteImport.update({
-  id: '/',
-  path: '/',
+const PublicRouteRoute = PublicRouteRouteImport.update({
+  id: '/_public',
   getParentRoute: () => rootRouteImport,
 } as any)
+const PublicIndexRoute = PublicIndexRouteImport.update({
+  id: '/',
+  path: '/',
+  getParentRoute: () => PublicRouteRoute,
+} as any)
+const PublicAboutRoute = PublicAboutRouteImport.update({
+  id: '/about',
+  path: '/about',
+  getParentRoute: () => PublicRouteRoute,
+} as any)
+const PublicContactRoute = PublicContactRouteImport.update({
+  id: '/contact',
+  path: '/contact',
+  getParentRoute: () => PublicRouteRoute,
+} as any)
+const PublicProjectsRoute = PublicProjectsRouteImport.update({
+  id: '/projects',
+  path: '/projects',
+  getParentRoute: () => PublicRouteRoute,
+} as any)
+const PublicServicesRoute = PublicServicesRouteImport.update({
+  id: '/services',
+  path: '/services',
+  getParentRoute: () => PublicRouteRoute,
+} as any)
+const AdminProtectedRouteRoute = AdminProtectedRouteRouteImport.update({
+  id: '/admin/_protected',
+  path: '/admin',
+  getParentRoute: () => rootRouteImport,
+} as any)
+<<<<<<< HEAD
 const AboutRoute = AboutRouteImport.update({
   id: '/about',
   path: '/about',
@@ -107,11 +152,79 @@ export interface FileRoutesById {
   '/services/$slug': typeof ServicesSlugRoute
   '/projects/': typeof ProjectsIndexRoute
   '/services/': typeof ServicesIndexRoute
+=======
+const AdminLoginRoute = AdminLoginRouteImport.update({
+  id: '/admin/login',
+  path: '/admin/login',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const AdminProtectedIndexRoute = AdminProtectedIndexRouteImport.update({
+  id: '/',
+  path: '/',
+  getParentRoute: () => AdminProtectedRouteRoute,
+} as any)
+const AdminProtectedContactsRoute = AdminProtectedContactsRouteImport.update({
+  id: '/contacts',
+  path: '/contacts',
+  getParentRoute: () => AdminProtectedRouteRoute,
+} as any)
+const AdminProtectedProjectsRoute = AdminProtectedProjectsRouteImport.update({
+  id: '/projects',
+  path: '/projects',
+  getParentRoute: () => AdminProtectedRouteRoute,
+} as any)
+const AdminProtectedSettingsRoute = AdminProtectedSettingsRouteImport.update({
+  id: '/settings',
+  path: '/settings',
+  getParentRoute: () => AdminProtectedRouteRoute,
+} as any)
+
+export interface FileRoutesByFullPath {
+  '/': typeof PublicIndexRoute
+  '/admin': typeof AdminProtectedRouteRouteWithChildren
+  '/about': typeof PublicAboutRoute
+  '/contact': typeof PublicContactRoute
+  '/projects': typeof PublicProjectsRoute
+  '/services': typeof PublicServicesRoute
+  '/admin/login': typeof AdminLoginRoute
+  '/admin/contacts': typeof AdminProtectedContactsRoute
+  '/admin/projects': typeof AdminProtectedProjectsRoute
+  '/admin/settings': typeof AdminProtectedSettingsRoute
+  '/admin/': typeof AdminProtectedIndexRoute
+}
+export interface FileRoutesByTo {
+  '/about': typeof PublicAboutRoute
+  '/contact': typeof PublicContactRoute
+  '/projects': typeof PublicProjectsRoute
+  '/services': typeof PublicServicesRoute
+  '/admin/login': typeof AdminLoginRoute
+  '/': typeof PublicIndexRoute
+  '/admin/contacts': typeof AdminProtectedContactsRoute
+  '/admin/projects': typeof AdminProtectedProjectsRoute
+  '/admin/settings': typeof AdminProtectedSettingsRoute
+  '/admin': typeof AdminProtectedIndexRoute
+}
+export interface FileRoutesById {
+  __root__: typeof rootRouteImport
+  '/_public': typeof PublicRouteRouteWithChildren
+  '/admin/_protected': typeof AdminProtectedRouteRouteWithChildren
+  '/_public/about': typeof PublicAboutRoute
+  '/_public/contact': typeof PublicContactRoute
+  '/_public/projects': typeof PublicProjectsRoute
+  '/_public/services': typeof PublicServicesRoute
+  '/admin/login': typeof AdminLoginRoute
+  '/_public/': typeof PublicIndexRoute
+  '/admin/_protected/contacts': typeof AdminProtectedContactsRoute
+  '/admin/_protected/projects': typeof AdminProtectedProjectsRoute
+  '/admin/_protected/settings': typeof AdminProtectedSettingsRoute
+  '/admin/_protected/': typeof AdminProtectedIndexRoute
+>>>>>>> 9fdda5a (update inages certificate)
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
   fullPaths:
     | '/'
+<<<<<<< HEAD
     | '/about'
     | '/ai-lab'
     | '/contact'
@@ -158,17 +271,104 @@ export interface RootRouteChildren {
   ServicesSlugRoute: typeof ServicesSlugRoute
   ProjectsIndexRoute: typeof ProjectsIndexRoute
   ServicesIndexRoute: typeof ServicesIndexRoute
+=======
+    | '/admin'
+    | '/about'
+    | '/contact'
+    | '/projects'
+    | '/services'
+    | '/admin/login'
+    | '/admin/contacts'
+    | '/admin/projects'
+    | '/admin/settings'
+    | '/admin/'
+  fileRoutesByTo: FileRoutesByTo
+  to:
+    | '/about'
+    | '/contact'
+    | '/projects'
+    | '/services'
+    | '/admin/login'
+    | '/'
+    | '/admin/contacts'
+    | '/admin/projects'
+    | '/admin/settings'
+    | '/admin'
+  id:
+    | '__root__'
+    | '/_public'
+    | '/admin/_protected'
+    | '/_public/about'
+    | '/_public/contact'
+    | '/_public/projects'
+    | '/_public/services'
+    | '/admin/login'
+    | '/_public/'
+    | '/admin/_protected/contacts'
+    | '/admin/_protected/projects'
+    | '/admin/_protected/settings'
+    | '/admin/_protected/'
+  fileRoutesById: FileRoutesById
+}
+export interface RootRouteChildren {
+  PublicRouteRoute: typeof PublicRouteRouteWithChildren
+  AdminProtectedRouteRoute: typeof AdminProtectedRouteRouteWithChildren
+  AdminLoginRoute: typeof AdminLoginRoute
+>>>>>>> 9fdda5a (update inages certificate)
 }
 
 declare module '@tanstack/react-router' {
   interface FileRoutesByPath {
-    '/': {
-      id: '/'
-      path: '/'
+    '/_public': {
+      id: '/_public'
+      path: ''
       fullPath: '/'
-      preLoaderRoute: typeof IndexRouteImport
+      preLoaderRoute: typeof PublicRouteRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/_public/': {
+      id: '/_public/'
+      path: '/'
+      fullPath: '/'
+      preLoaderRoute: typeof PublicIndexRouteImport
+      parentRoute: typeof PublicRouteRoute
+    }
+    '/_public/about': {
+      id: '/_public/about'
+      path: '/about'
+      fullPath: '/about'
+      preLoaderRoute: typeof PublicAboutRouteImport
+      parentRoute: typeof PublicRouteRoute
+    }
+    '/_public/contact': {
+      id: '/_public/contact'
+      path: '/contact'
+      fullPath: '/contact'
+      preLoaderRoute: typeof PublicContactRouteImport
+      parentRoute: typeof PublicRouteRoute
+    }
+    '/_public/projects': {
+      id: '/_public/projects'
+      path: '/projects'
+      fullPath: '/projects'
+      preLoaderRoute: typeof PublicProjectsRouteImport
+      parentRoute: typeof PublicRouteRoute
+    }
+    '/_public/services': {
+      id: '/_public/services'
+      path: '/services'
+      fullPath: '/services'
+      preLoaderRoute: typeof PublicServicesRouteImport
+      parentRoute: typeof PublicRouteRoute
+    }
+    '/admin/_protected': {
+      id: '/admin/_protected'
+      path: '/admin'
+      fullPath: '/admin'
+      preLoaderRoute: typeof AdminProtectedRouteRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+<<<<<<< HEAD
     '/about': {
       id: '/about'
       path: '/about'
@@ -231,11 +431,85 @@ declare module '@tanstack/react-router' {
       fullPath: '/services/$slug'
       preLoaderRoute: typeof ServicesSlugRouteImport
       parentRoute: typeof rootRouteImport
+=======
+    '/admin/login': {
+      id: '/admin/login'
+      path: '/admin/login'
+      fullPath: '/admin/login'
+      preLoaderRoute: typeof AdminLoginRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/admin/_protected/': {
+      id: '/admin/_protected/'
+      path: '/'
+      fullPath: '/admin/'
+      preLoaderRoute: typeof AdminProtectedIndexRouteImport
+      parentRoute: typeof AdminProtectedRouteRoute
+    }
+    '/admin/_protected/contacts': {
+      id: '/admin/_protected/contacts'
+      path: '/contacts'
+      fullPath: '/admin/contacts'
+      preLoaderRoute: typeof AdminProtectedContactsRouteImport
+      parentRoute: typeof AdminProtectedRouteRoute
+    }
+    '/admin/_protected/projects': {
+      id: '/admin/_protected/projects'
+      path: '/projects'
+      fullPath: '/admin/projects'
+      preLoaderRoute: typeof AdminProtectedProjectsRouteImport
+      parentRoute: typeof AdminProtectedRouteRoute
+    }
+    '/admin/_protected/settings': {
+      id: '/admin/_protected/settings'
+      path: '/settings'
+      fullPath: '/admin/settings'
+      preLoaderRoute: typeof AdminProtectedSettingsRouteImport
+      parentRoute: typeof AdminProtectedRouteRoute
+>>>>>>> 9fdda5a (update inages certificate)
     }
   }
 }
 
+interface PublicRouteRouteChildren {
+  PublicAboutRoute: typeof PublicAboutRoute
+  PublicContactRoute: typeof PublicContactRoute
+  PublicProjectsRoute: typeof PublicProjectsRoute
+  PublicServicesRoute: typeof PublicServicesRoute
+  PublicIndexRoute: typeof PublicIndexRoute
+}
+
+const PublicRouteRouteChildren: PublicRouteRouteChildren = {
+  PublicAboutRoute: PublicAboutRoute,
+  PublicContactRoute: PublicContactRoute,
+  PublicProjectsRoute: PublicProjectsRoute,
+  PublicServicesRoute: PublicServicesRoute,
+  PublicIndexRoute: PublicIndexRoute,
+}
+
+const PublicRouteRouteWithChildren = PublicRouteRoute._addFileChildren(
+  PublicRouteRouteChildren,
+)
+
+interface AdminProtectedRouteRouteChildren {
+  AdminProtectedContactsRoute: typeof AdminProtectedContactsRoute
+  AdminProtectedProjectsRoute: typeof AdminProtectedProjectsRoute
+  AdminProtectedSettingsRoute: typeof AdminProtectedSettingsRoute
+  AdminProtectedIndexRoute: typeof AdminProtectedIndexRoute
+}
+
+const AdminProtectedRouteRouteChildren: AdminProtectedRouteRouteChildren = {
+  AdminProtectedContactsRoute: AdminProtectedContactsRoute,
+  AdminProtectedProjectsRoute: AdminProtectedProjectsRoute,
+  AdminProtectedSettingsRoute: AdminProtectedSettingsRoute,
+  AdminProtectedIndexRoute: AdminProtectedIndexRoute,
+}
+
+const AdminProtectedRouteRouteWithChildren =
+  AdminProtectedRouteRoute._addFileChildren(AdminProtectedRouteRouteChildren)
+
 const rootRouteChildren: RootRouteChildren = {
+<<<<<<< HEAD
   IndexRoute: IndexRoute,
   AboutRoute: AboutRoute,
   AiLabRoute: AiLabRoute,
@@ -246,6 +520,11 @@ const rootRouteChildren: RootRouteChildren = {
   ServicesSlugRoute: ServicesSlugRoute,
   ProjectsIndexRoute: ProjectsIndexRoute,
   ServicesIndexRoute: ServicesIndexRoute,
+=======
+  PublicRouteRoute: PublicRouteRouteWithChildren,
+  AdminProtectedRouteRoute: AdminProtectedRouteRouteWithChildren,
+  AdminLoginRoute: AdminLoginRoute,
+>>>>>>> 9fdda5a (update inages certificate)
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
