@@ -1,12 +1,16 @@
 import { createFileRoute, redirect, useNavigate } from "@tanstack/react-router";
-import { Lock, Mail, ShieldCheck, ArrowRight, Eye, EyeOff } from "lucide-react";
+import { Lock, Mail, ShieldCheck, ArrowRight, Eye, EyeOff, Loader2 } from "lucide-react";
 import { useState, type FormEvent } from "react";
 import { toast } from "sonner";
-import { adminAuth } from "@/lib/admin-auth";
+import { supabase } from "@/lib/supabase";
 
 export const Route = createFileRoute("/admin/login")({
-  beforeLoad: () => {
-    if (adminAuth.isAuthenticated()) {
+  beforeLoad: async () => {
+    const {
+      data: { session },
+    } = await supabase.auth.getSession();
+
+    if (session) {
       throw redirect({ to: "/admin" });
     }
   },
@@ -18,26 +22,29 @@ export const Route = createFileRoute("/admin/login")({
 
 function AdminLoginPage() {
   const navigate = useNavigate();
-  const [email, setEmail] = useState("admin@secstackhq.com");
-  const [password, setPassword] = useState("admin123");
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
   const [showPassword, setShowPassword] = useState(false);
   const [loading, setLoading] = useState(false);
 
-  const handleSubmit = (e: FormEvent) => {
+  const handleSubmit = async (e: FormEvent) => {
     e.preventDefault();
     setLoading(true);
 
-    setTimeout(() => {
-      const success = adminAuth.login(email, password);
-      setLoading(false);
+    const { error } = await supabase.auth.signInWithPassword({
+      email: email.trim(),
+      password,
+    });
 
-      if (success) {
-        toast.success("Welcome back, Admin");
-        navigate({ to: "/admin" });
-      } else {
-        toast.error("Invalid credentials. Try admin@secstackhq.com / admin123");
-      }
-    }, 400);
+    setLoading(false);
+
+    if (error) {
+      toast.error(error.message || "Invalid email or password.");
+      return;
+    }
+
+    toast.success("Welcome back, Admin");
+    navigate({ to: "/admin" });
   };
 
   return (
@@ -57,13 +64,18 @@ function AdminLoginPage() {
 
         <form onSubmit={handleSubmit} className="space-y-4">
           <div>
-            <label className="mb-1.5 block text-sm font-medium text-foreground">
+            <label
+              htmlFor="admin-email"
+              className="mb-1.5 block text-sm font-medium text-foreground"
+            >
               Email Address
             </label>
             <div className="relative">
               <Mail className="pointer-events-none absolute top-1/2 left-3.5 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
               <input
+                id="admin-email"
                 type="email"
+                autoComplete="email"
                 required
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
@@ -74,13 +86,18 @@ function AdminLoginPage() {
           </div>
 
           <div>
-            <label className="mb-1.5 block text-sm font-medium text-foreground">
+            <label
+              htmlFor="admin-password"
+              className="mb-1.5 block text-sm font-medium text-foreground"
+            >
               Password
             </label>
             <div className="relative">
               <Lock className="pointer-events-none absolute top-1/2 left-3.5 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
               <input
+                id="admin-password"
                 type={showPassword ? "text" : "password"}
+                autoComplete="current-password"
                 required
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
@@ -107,11 +124,19 @@ function AdminLoginPage() {
             disabled={loading}
             className="mt-2 flex w-full items-center justify-center gap-2 rounded-lg bg-[#2f6bff] px-4 py-2.5 text-sm font-semibold text-white transition hover:bg-[#2f6bff]/90 disabled:opacity-60"
           >
-            {loading ? "Authenticating..." : "Sign In"}
-            <ArrowRight className="h-4 w-4" />
+            {loading ? (
+              <>
+                <Loader2 className="h-4 w-4 animate-spin" />
+                Authenticating...
+              </>
+            ) : (
+              <>
+                Sign In
+                <ArrowRight className="h-4 w-4" />
+              </>
+            )}
           </button>
         </form>
-
       </div>
     </div>
   );

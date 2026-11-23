@@ -8,7 +8,7 @@ import {
 } from "@animate-ui/react/primitives/bottom-navigation";
 
 import {
-  Home,
+  Home, 
   UserRound,
   FolderKanban,
   BriefcaseBusiness,

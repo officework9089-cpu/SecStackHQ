@@ -1,9 +1,10 @@
-import { createFileRoute, Link } from "@tanstack/react-router";
+import { createFileRoute } from "@tanstack/react-router";
 import { motion, AnimatePresence } from "motion/react";
-import { useState } from "react";
-import { ArrowLeft, ExternalLink, Github, Maximize2, Shield, Code, Palette, Globe } from "lucide-react";
+import { useEffect, useState } from "react";
+import { ExternalLink, Github, Maximize2, Shield, Code, Palette, Globe, Loader2 } from "lucide-react";
 
-import { projects, projectFilters, type Project } from "@/data/site";
+import { projectFilters } from "@/data/site";
+import { supabase } from "@/lib/supabase";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Dialog, DialogContent, DialogDescription, DialogTitle } from "@/components/ui/dialog";
@@ -17,7 +18,19 @@ export const Route = createFileRoute("/_public/projects")({
   component: AllProjectsPage,
 });
 
-// Category-specific visual config for layout adaptation
+interface PublicProject {
+  id: string;
+  title: string;
+  category: string;
+  client: string;
+  summary: string;
+  details: string;
+  image: string;
+  stack: string[];
+  demo: string;
+  github: string;
+}
+
 const categoryMeta: Record<string, { icon: any; accentColor: string; description: string }> = {
   All: {
     icon: Globe,
@@ -42,20 +55,46 @@ const categoryMeta: Record<string, { icon: any; accentColor: string; description
 };
 
 function AllProjectsPage() {
+  const [projects, setProjects] = useState<PublicProject[]>([]);
+  const [loading, setLoading] = useState(true);
   const [filter, setFilter] = useState<(typeof projectFilters)[number]>("All");
-  const [selected, setSelected] = useState<Project | null>(null);
+  const [selected, setSelected] = useState<PublicProject | null>(null);
+
+  useEffect(() => {
+    let active = true;
+
+    async function fetchProjects() {
+      setLoading(true);
+      const { data, error } = await supabase
+        .from("projects")
+        .select("id, title, category, client, summary, details, image, stack, demo, github")
+        .eq("status", "Published")
+        .order("created_at", { ascending: false });
+
+      if (!active) return;
+
+      if (!error && data) {
+        setProjects(data as PublicProject[]);
+      }
+      setLoading(false);
+    }
+
+    fetchProjects();
+    return () => {
+      active = false;
+    };
+  }, []);
 
   const activeMeta = categoryMeta[filter] || categoryMeta["All"];
   const ActiveIcon = activeMeta.icon;
 
-  const filteredList = filter === "All" ? projects : projects.filter((p) => p.category === filter);
+  const filteredList =
+    filter === "All" ? projects : projects.filter((p) => p.category === filter);
 
   return (
     <div className="min-h-screen text-foreground pb-24">
       {/* Modern Hero Banner */}
       <section className="relative overflow-hidden border-b border-border/60 min-h-[75vh] pt-28 sm:pt-36 pb-16 sm:pb-24 flex flex-col justify-between">
-        
-
         {/* Ambient Category-Reactive Glow Orb */}
         <motion.div
           key={filter}
@@ -143,58 +182,71 @@ function AllProjectsPage() {
 
       {/* Projects Grid */}
       <main className="mx-auto max-w-7xl px-6 pt-12 lg:px-12">
-        <motion.div layout className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
-          <AnimatePresence mode="popLayout">
-            {filteredList.map((p) => (
-              <motion.article
-                layout
-                key={p.id}
-                initial={{ opacity: 0, scale: 0.95 }}
-                animate={{ opacity: 1, scale: 1 }}
-                exit={{ opacity: 0, scale: 0.95 }}
-                transition={{ duration: 0.3 }}
-                className="border-glow glass shadow-depth group overflow-hidden rounded-3xl bg-card border border-border"
-              >
-                <button
-                  onClick={() => setSelected(p)}
-                  className="relative block aspect-16/10 w-full overflow-hidden text-left"
-                  aria-label={`View details for ${p.title}`}
-                >
-                  <img
-                    src={p.image}
-                    alt={p.title}
-                    width={1280}
-                    height={832}
-                    loading="lazy"
-                    className="size-full object-cover transition-transform duration-700 group-hover:scale-110"
-                  />
-                  <div className="absolute inset-0 flex items-end bg-linear-to-t from-black/80 via-black/30 to-transparent p-5 opacity-0 transition-opacity duration-500 group-hover:opacity-100">
-                    <span className="flex items-center gap-2 rounded-full bg-white px-4 py-2 text-sm font-bold text-black">
-                      <Maximize2 className="size-4" /> View case study
-                    </span>
-                  </div>
-                </button>
-                <div className="flex flex-col gap-3 p-6">
-                  <span className="text-primary text-xs font-bold tracking-widest uppercase">{p.category}</span>
-                  <h3 className="font-['Sora'] text-xl font-bold">{p.title}</h3>
-                  <p className="text-muted-foreground text-sm line-clamp-2">{p.summary}</p>
-                  <div className="flex flex-wrap gap-1.5 pt-2">
-                    {p.stack.map((t) => (
-                      <Badge key={t} variant="secondary" className="rounded-full text-xs">
-                        {t}
-                      </Badge>
-                    ))}
-                  </div>
-                </div>
-              </motion.article>
-            ))}
-          </AnimatePresence>
-        </motion.div>
-
-        {filteredList.length === 0 && (
-          <div className="py-20 text-center">
-            <p className="text-muted-foreground">No projects found in this category.</p>
+        {loading ? (
+          <div className="flex items-center justify-center gap-2 py-20 text-muted-foreground">
+            <Loader2 className="size-5 animate-spin" />
+            <span>Loading case studies...</span>
           </div>
+        ) : (
+          <>
+            <motion.div layout className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+              <AnimatePresence mode="popLayout">
+                {filteredList.map((p) => (
+                  <motion.article
+                    layout
+                    key={p.id}
+                    initial={{ opacity: 0, scale: 0.95 }}
+                    animate={{ opacity: 1, scale: 1 }}
+                    exit={{ opacity: 0, scale: 0.95 }}
+                    transition={{ duration: 0.3 }}
+                    className="border-glow glass shadow-depth group overflow-hidden rounded-3xl bg-card border border-border"
+                  >
+                    <button
+                      onClick={() => setSelected(p)}
+                      className="relative block aspect-16/10 w-full overflow-hidden text-left"
+                      aria-label={`View details for ${p.title}`}
+                    >
+                      <img
+                        src={p.image || AboutHero}
+                        alt={p.title}
+                        width={1280}
+                        height={832}
+                        loading="lazy"
+                        className="size-full object-cover transition-transform duration-700 group-hover:scale-110"
+                      />
+                      <div className="absolute inset-0 flex items-end bg-linear-to-t from-black/80 via-black/30 to-transparent p-5 opacity-0 transition-opacity duration-500 group-hover:opacity-100">
+                        <span className="flex items-center gap-2 rounded-full bg-white px-4 py-2 text-sm font-bold text-black">
+                          <Maximize2 className="size-4" /> View case study
+                        </span>
+                      </div>
+                    </button>
+                    <div className="flex flex-col gap-3 p-6">
+                      <span className="text-primary text-xs font-bold tracking-widest uppercase">
+                        {p.category}
+                      </span>
+                      <h3 className="font-['Sora'] text-xl font-bold">{p.title}</h3>
+                      <p className="text-muted-foreground text-sm line-clamp-2">{p.summary}</p>
+                      {p.stack?.length > 0 && (
+                        <div className="flex flex-wrap gap-1.5 pt-2">
+                          {p.stack.map((t) => (
+                            <Badge key={t} variant="secondary" className="rounded-full text-xs">
+                              {t}
+                            </Badge>
+                          ))}
+                        </div>
+                      )}
+                    </div>
+                  </motion.article>
+                ))}
+              </AnimatePresence>
+            </motion.div>
+
+            {filteredList.length === 0 && (
+              <div className="py-20 text-center">
+                <p className="text-muted-foreground">No projects found in this category.</p>
+              </div>
+            )}
+          </>
         )}
       </main>
 
@@ -204,35 +256,49 @@ function AllProjectsPage() {
           {selected && (
             <>
               <img
-                src={selected.image}
+                src={selected.image || AboutHero}
                 alt={selected.title}
                 width={1280}
                 height={832}
                 className="aspect-video w-full object-cover"
               />
               <div className="flex flex-col gap-4 p-6 sm:p-8">
-                <span className="text-primary text-xs font-bold tracking-widest uppercase">{selected.category}</span>
-                <DialogTitle className="font-['Sora'] text-2xl font-bold sm:text-3xl">{selected.title}</DialogTitle>
-                <DialogDescription className="text-muted-foreground text-base leading-relaxed">{selected.details}</DialogDescription>
-                <div className="flex flex-wrap gap-2">
-                  {selected.stack.map((t) => (
-                    <Badge key={t} variant="secondary" className="rounded-full px-3 py-1">
-                      {t}
-                    </Badge>
-                  ))}
-                </div>
-                <div className="flex flex-col gap-3 pt-4 sm:flex-row">
-                  <Button size="lg" asChild className="bg-[#2f6bff] text-white hover:bg-[#2f6bff]/90">
-                    <a href={selected.demo} target="_blank" rel="noreferrer">
-                      <ExternalLink className="size-4" /> Live demo
-                    </a>
-                  </Button>
-                  <Button variant="outline" size="lg" asChild>
-                    <a href={selected.github} target="_blank" rel="noreferrer">
-                      <Github className="size-4" /> GitHub repository
-                    </a>
-                  </Button>
-                </div>
+                <span className="text-primary text-xs font-bold tracking-widest uppercase">
+                  {selected.category}
+                </span>
+                <DialogTitle className="font-['Sora'] text-2xl font-bold sm:text-3xl">
+                  {selected.title}
+                </DialogTitle>
+                <DialogDescription className="text-muted-foreground text-base leading-relaxed">
+                  {selected.details}
+                </DialogDescription>
+                {selected.stack?.length > 0 && (
+                  <div className="flex flex-wrap gap-2">
+                    {selected.stack.map((t) => (
+                      <Badge key={t} variant="secondary" className="rounded-full px-3 py-1">
+                        {t}
+                      </Badge>
+                    ))}
+                  </div>
+                )}
+                {(selected.demo || selected.github) && (
+                  <div className="flex flex-col gap-3 pt-4 sm:flex-row">
+                    {selected.demo && (
+                      <Button size="lg" asChild className="bg-[#2f6bff] text-white hover:bg-[#2f6bff]/90">
+                        <a href={selected.demo} target="_blank" rel="noreferrer">
+                          <ExternalLink className="size-4" /> Live demo
+                        </a>
+                      </Button>
+                    )}
+                    {selected.github && (
+                      <Button variant="outline" size="lg" asChild>
+                        <a href={selected.github} target="_blank" rel="noreferrer">
+                          <Github className="size-4" /> GitHub repository
+                        </a>
+                      </Button>
+                    )}
+                  </div>
+                )}
               </div>
             </>
           )}

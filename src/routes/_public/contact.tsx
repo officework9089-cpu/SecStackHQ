@@ -14,6 +14,7 @@ import { buildMailto, buildWhatsApp, contactSchema, type ContactInput } from "@/
 import { cn } from "@/lib/utils/calculator";
 import { calculateProjectEstimate } from "@/lib/utils/calculator";
 import { FadeIn } from "@/components/motion/FadeIn";
+import { supabase } from "@/lib/supabase";
 
 export const Route = createFileRoute("/_public/contact")({
   head: () => ({
@@ -51,6 +52,33 @@ function ContactsPage() {
     if (errors[k]) setErrors((e) => ({ ...e, [k]: undefined }));
   };
 
+  // const onSubmit = async (e: FormEvent) => {
+  //   e.preventDefault();
+  //   const parsed = contactSchema.safeParse(values);
+  //   if (!parsed.success) {
+  //     const errs: Errors = {};
+  //     parsed.error.issues.forEach((i) => {
+  //       const k = i.path[0] as keyof ContactInput;
+  //       if (!errs[k]) errs[k] = i.message;
+  //     });
+  //     setErrors(errs);
+  //     toast.error("Please fix the highlighted fields.");
+  //     return;
+  //   }
+  //   setStatus("loading");
+  //   await new Promise((r) => setTimeout(r, 1200));
+  //   setSent(parsed.data);
+  //   setStatus("success");
+  //   setValues(empty);
+  // };
+
+  const field = (k: keyof ContactInput) => ({
+    id: `contact-${k}`,
+    value: values[k],
+    "aria-invalid": !!errors[k],
+    "aria-describedby": errors[k] ? `contact-${k}-error` : undefined,
+    className: cn("h-12 rounded-xl bg-background/60", errors[k] && "border-destructive"),
+  });
   const onSubmit = async (e: FormEvent) => {
     e.preventDefault();
     const parsed = contactSchema.safeParse(values);
@@ -64,20 +92,34 @@ function ContactsPage() {
       toast.error("Please fix the highlighted fields.");
       return;
     }
+
     setStatus("loading");
-    await new Promise((r) => setTimeout(r, 1200));
+
+    const { error } = await supabase.from("contacts").insert({
+      name: parsed.data.name,
+      email: parsed.data.email,
+      company: parsed.data.company ?? "",
+      subject: parsed.data.subject,
+      service: parsed.data.service,
+      message: parsed.data.message,
+      selected_services: selectedServices,
+      complexity,
+      estimated_cost: estimate.baseCost,
+      estimated_timeline_weeks: estimate.timelineWeeks,
+      replied: false,
+    });
+
+    if (error) {
+      setStatus("idle");
+      toast.error(error.message || "Could not send your message. Please try again.");
+      return;
+    }
+
     setSent(parsed.data);
     setStatus("success");
     setValues(empty);
+    toast.success("Message saved! You can also send a copy via email or WhatsApp.");
   };
-
-  const field = (k: keyof ContactInput) => ({
-    id: `contact-${k}`,
-    value: values[k],
-    "aria-invalid": !!errors[k],
-    "aria-describedby": errors[k] ? `contact-${k}-error` : undefined,
-    className: cn("h-12 rounded-xl bg-background/60", errors[k] && "border-destructive"),
-  });
 
   const ErrorText = ({ k }: { k: keyof ContactInput }) => (
     <AnimatePresence>

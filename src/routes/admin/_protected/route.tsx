@@ -16,15 +16,21 @@ import {
   X,
   ExternalLink,
 } from "lucide-react";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { toast } from "sonner";
-import { adminAuth } from "@/lib/admin-auth";
+import { supabase } from "@/lib/supabase";
 
 export const Route = createFileRoute("/admin/_protected")({
-  beforeLoad: () => {
-    if (!adminAuth.isAuthenticated()) {
+  beforeLoad: async () => {
+    const {
+      data: { session },
+    } = await supabase.auth.getSession();
+
+    if (!session) {
       throw redirect({ to: "/admin/login" });
     }
+
+    return { user: session.user };
   },
   component: AdminLayout,
 });
@@ -38,13 +44,39 @@ const navItems = [
 
 function AdminLayout() {
   const navigate = useNavigate();
+  const { user } = Route.useRouteContext();
   const [sidebarOpen, setSidebarOpen] = useState(false);
+  const [signingOut, setSigningOut] = useState(false);
 
-  const handleLogout = () => {
-    adminAuth.logout();
+  // Redirect immediately if the session expires or user signs out in another tab
+  useEffect(() => {
+    const {
+      data: { subscription },
+    } = supabase.auth.onAuthStateChange((_event, session) => {
+      if (!session) {
+        navigate({ to: "/admin/login" });
+      }
+    });
+
+    return () => subscription.unsubscribe();
+  }, [navigate]);
+
+  const handleLogout = async () => {
+    setSigningOut(true);
+    const { error } = await supabase.auth.signOut();
+    setSigningOut(false);
+
+    if (error) {
+      toast.error(error.message || "Failed to sign out");
+      return;
+    }
+
     toast.info("Signed out of admin panel");
     navigate({ to: "/admin/login" });
   };
+
+  const userEmail = user.email ?? "admin@secstackhq.com";
+  const initials = userEmail.slice(0, 2).toUpperCase();
 
   return (
     <div className="flex min-h-screen bg-background text-foreground">
@@ -108,11 +140,13 @@ function AdminLayout() {
             <ExternalLink className="h-3.5 w-3.5" />
           </Link>
           <button
+            type="button"
+            disabled={signingOut}
             onClick={handleLogout}
-            className="flex w-full items-center gap-3 rounded-lg px-3 py-2 text-sm font-medium text-destructive transition-colors hover:bg-destructive/10"
+            className="flex w-full items-center gap-3 rounded-lg px-3 py-2 text-sm font-medium text-destructive transition-colors hover:bg-destructive/10 disabled:opacity-60"
           >
             <LogOut className="h-4 w-4" />
-            Sign Out
+            {signingOut ? "Signing out..." : "Sign Out"}
           </button>
         </div>
       </aside>
@@ -127,9 +161,9 @@ function AdminLayout() {
             <Menu className="h-5 w-5" />
           </button>
           <div className="ml-auto flex items-center gap-3">
-            <span className="text-xs text-muted-foreground">admin@secstackhq.com</span>
+            <span className="text-xs text-muted-foreground">{userEmail}</span>
             <div className="flex h-8 w-8 items-center justify-center rounded-full bg-[#2f6bff]/15 text-xs font-bold text-[#2f6bff]">
-              AD
+              {initials}
             </div>
           </div>
         </header>
