@@ -92,6 +92,10 @@ export function Footer() {
               <a href={`tel:${brand.phone.replace(/\s/g, "")}`} className="hover:text-primary">
                 {brand.phone}
               </a>
+              <br />
+              <a href={`tel:${brand.phone1.replace(/\s/g, "")}`} className="hover:text-primary">
+                {brand.phone1}
+              </a>
             </li>
             <li className="flex gap-2.5">
               <MapPin className="text-primary size-4 shrink-0" />

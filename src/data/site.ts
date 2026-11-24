@@ -30,7 +30,8 @@ export const brand = {
   name: "SecStackHQ",
   tagline: "DEVELOP • SECURE • GROW",
   email: "info@secstackhq.com",
-  phone: "+92 3252249291",
+  phone: "+92 325 224 9291",
+  phone1: "+92 348 660 3537",
   whatsapp: "923252249291",
   location: "Karachi, Pakistan · Serving clients worldwide",
 };
@@ -111,7 +112,7 @@ export const services: Service[] = [
   },
 ];
 
-export type ProjectCategory = "Web" | "Security" | "Branding" | "Marketing";
+export type ProjectCategory = "Web Development"  | "Security" | "Branding" | "Marketing";
 
 export interface Project {
   id: string;
@@ -129,7 +130,7 @@ export const projects: Project[] = [
   {
     id: "zenith",
     title: "Zenith Analytics Platform",
-    category: "Web",
+    category: "Web Development",
     summary: "Real-time SaaS dashboard for revenue and project insights.",
     details:
       "A multi-tenant analytics dashboard with live charts, role-based access and sub-second data refresh. Built for scale with edge rendering and an optimized API layer.",
@@ -165,7 +166,7 @@ export const projects: Project[] = [
   {
     id: "shoply",
     title: "Shoply Commerce App",
-    category: "Web",
+    category: "Web Development",
     summary: "Mobile-first shopping experience with 2× conversion.",
     details:
       "A blazing-fast storefront with smart search, one-tap checkout and personalized recommendations. Conversion doubled within the first quarter.",
@@ -202,7 +203,7 @@ export const projects: Project[] = [
 
 export const projectFilters: Array<"All" | ProjectCategory> = [
   "All",
-  "Web",
+  "Web Development",
   "Security",
   "Branding",
   "Marketing",
