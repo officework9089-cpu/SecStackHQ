@@ -1,19 +1,26 @@
 import { motion } from "motion/react";
-import { ExternalLink, Loader2, ArrowRight } from "lucide-react";
+import { ExternalLink, Github, Maximize2, ArrowRight, Loader2 } from "lucide-react";
 import { useEffect, useState } from "react";
 import { Link } from "@tanstack/react-router";
 
 import { Section, SectionHeading } from "@/components/common/SectionHeading";
 import { GradientText } from "@/components/motion";
+import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
+import { Dialog, DialogContent, DialogDescription, DialogTitle } from "@/components/ui/dialog";
 import { supabase } from "@/lib/supabase";
 import AboutHero from "@/assets/Futuristic Blue Cybersecurity Abstract Background.png";
 
 interface FeaturedProject {
   id: string;
   title: string;
+  category: string;
+  summary: string;
+  details: string;
   image: string;
+  stack: string[];
   demo: string;
+  github: string;
 }
 
 function shuffleArray<T>(items: T[]): T[] {
@@ -25,87 +32,10 @@ function shuffleArray<T>(items: T[]): T[] {
   return copy;
 }
 
-function LiveProjectColumn({ project }: { project: FeaturedProject }) {
-  const [activePreview, setActivePreview] = useState(false);
-  const [iframeLoaded, setIframeLoaded] = useState(false);
-  const [iframeFailed, setIframeFailed] = useState(false);
-
-  const hasValidDemo =
-    Boolean(project.demo) &&
-    project.demo.startsWith("http") &&
-    !project.demo.includes("github.com");
-
-  return (
-    <motion.a
-      href={project.demo || "#"}
-      target={project.demo ? "_blank" : undefined}
-      rel={project.demo ? "noreferrer" : undefined}
-      aria-label={`Open ${project.title}`}
-      onPointerEnter={() => setActivePreview(true)}
-      onPointerLeave={() => setActivePreview(false)}
-      onPointerDown={() => setActivePreview(true)}
-      onPointerUp={() => setActivePreview(false)}
-      onPointerCancel={() => setActivePreview(false)}
-      initial={{ opacity: 0, y: 16 }}
-      animate={{ opacity: 1, y: 0 }}
-      transition={{ duration: 0.4 }}
-      className="border-glow glass shadow-depth group relative block h-[290px] w-full overflow-hidden rounded-2xl bg-card sm:h-[360px] md:h-[400px] lg:h-[460px] lg:rounded-3xl"
-    >
-      {/* Fallback / Background Cover Image (hero framed at top by default) */}
-      <img
-        src={project.image || AboutHero}
-        alt={project.title}
-        loading="lazy"
-        className={`absolute inset-0 size-full object-cover object-top transition-transform duration-[4500ms] ease-in-out ${
-          activePreview
-            ? "-translate-y-[18%] scale-[1.03]"
-            : "translate-y-0 scale-100"
-        } ${
-          hasValidDemo && iframeLoaded && !iframeFailed
-            ? "opacity-0"
-            : "opacity-100"
-        }`}
-      />
-
-      {/* Live Scaled Real Homepage Preview */}
-      {hasValidDemo && !iframeFailed && (
-        <div className="pointer-events-none absolute inset-0 overflow-hidden">
-          <div
-            className="origin-top-left transition-transform duration-[5500ms] ease-in-out"
-            style={{
-              width: "250%",
-              height: "520%",
-              transform: activePreview
-                ? "scale(0.4) translateY(-38%)"
-                : "scale(0.4) translateY(0%)",
-            }}
-          >
-            <iframe
-              src={project.demo}
-              title={project.title}
-              loading="lazy"
-              sandbox="allow-scripts allow-same-origin"
-              onLoad={() => setIframeLoaded(true)}
-              onError={() => setIframeFailed(true)}
-              className={`size-full border-0 bg-white transition-opacity duration-500 ${
-                iframeLoaded ? "opacity-100" : "opacity-0"
-              }`}
-            />
-          </div>
-        </div>
-      )}
-
-      {/* Subtle top-right external link indicator */}
-      <div className="pointer-events-none absolute top-2.5 right-2.5 z-10 flex size-8 items-center justify-center rounded-full bg-black/65 text-white opacity-90 backdrop-blur-md transition-all duration-300 sm:top-3.5 sm:right-3.5 sm:size-9 sm:opacity-0 sm:group-hover:opacity-100">
-        <ExternalLink className="size-3.5 sm:size-4" />
-      </div>
-    </motion.a>
-  );
-}
-
 export function Projects() {
   const [featuredProjects, setFeaturedProjects] = useState<FeaturedProject[]>([]);
   const [loading, setLoading] = useState(true);
+  const [selected, setSelected] = useState<FeaturedProject | null>(null);
 
   useEffect(() => {
     let active = true;
@@ -114,7 +44,7 @@ export function Projects() {
       setLoading(true);
       const { data, error } = await supabase
         .from("projects")
-        .select("id, title, image, demo")
+        .select("id, title, category, summary, details, image, stack, demo, github")
         .eq("status", "Published");
 
       if (!active) return;
@@ -134,7 +64,7 @@ export function Projects() {
 
   return (
     <Section id="projects">
-      <div className="mb-6 flex flex-col items-start justify-between gap-4 sm:mb-8 sm:flex-row sm:items-end lg:mb-10">
+      <div className="flex flex-col items-start justify-between gap-4 sm:flex-row sm:items-end mb-10">
         <SectionHeading
           eyebrow="Selected work"
           title={
@@ -144,34 +74,125 @@ export function Projects() {
           }
           description="A snapshot of what we've built, secured, and grown for clients across industries."
         />
-        <Button
-          variant="glass"
-          size="lg"
-          asChild
-          className="w-full justify-center sm:mb-4 sm:w-auto sm:justify-start"
-        >
+        <Button variant="glass" size="lg" asChild className="mb-4">
           <Link to="/projects">
-            View all projects <ArrowRight className="ml-1 size-4" />
+            View all projects <ArrowRight className="size-4 ml-1" />
           </Link>
         </Button>
       </div>
 
       {loading ? (
-        <div className="flex items-center justify-center gap-2 py-12 text-sm text-muted-foreground sm:py-14 sm:text-base">
-          <Loader2 className="size-4 animate-spin sm:size-5" />
-          <span>Loading live previews...</span>
+        <div className="flex items-center justify-center gap-2 py-14 text-muted-foreground">
+          <Loader2 className="size-5 animate-spin" />
+          <span>Loading featured projects...</span>
         </div>
       ) : featuredProjects.length === 0 ? (
-        <div className="py-10 text-center text-sm text-muted-foreground sm:py-12 sm:text-base">
+        <div className="py-12 text-center text-muted-foreground">
           No published projects available yet.
         </div>
       ) : (
-        <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 sm:gap-5 lg:grid-cols-3 lg:gap-6">
-          {featuredProjects.map((project) => (
-            <LiveProjectColumn key={project.id} project={project} />
+        <motion.div layout className="grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
+          {featuredProjects.map((p) => (
+            <motion.article
+              key={p.id}
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.4 }}
+              className="border-glow glass shadow-depth group overflow-hidden rounded-3xl"
+            >
+              <button
+                onClick={() => setSelected(p)}
+                className="relative block aspect-[16/10] w-full overflow-hidden text-left"
+                aria-label={`View details for ${p.title}`}
+              >
+                <img
+                  src={p.image || AboutHero}
+                  alt={p.title}
+                  width={1280}
+                  height={832}
+                  loading="lazy"
+                  className="size-full object-cover transition-transform duration-700 group-hover:scale-110"
+                />
+                <div className="from-brand-navy/85 via-brand-navy/30 absolute inset-0 flex items-end bg-gradient-to-t to-transparent p-5 opacity-0 transition-opacity duration-500 group-hover:opacity-100 group-focus-visible:opacity-100">
+                  <span className="bg-tile text-brand-navy flex items-center gap-2 rounded-full px-4 py-2 text-sm font-bold">
+                    <Maximize2 className="size-4" /> View case study
+                  </span>
+                </div>
+              </button>
+              <div className="flex flex-col gap-3 p-6">
+                <span className="text-primary text-xs font-bold tracking-widest uppercase">
+                  {p.category}
+                </span>
+                <h3 className="text-lg font-bold">{p.title}</h3>
+                <p className="text-muted-foreground text-sm">{p.summary}</p>
+                {p.stack?.length > 0 && (
+                  <div className="flex flex-wrap gap-1.5">
+                    {p.stack.slice(0, 3).map((t) => (
+                      <Badge key={t} variant="secondary" className="rounded-full">
+                        {t}
+                      </Badge>
+                    ))}
+                  </div>
+                )}
+              </div>
+            </motion.article>
           ))}
-        </div>
+        </motion.div>
       )}
+
+      <Dialog open={!!selected} onOpenChange={(o) => !o && setSelected(null)}>
+        <DialogContent className="max-h-[90svh] overflow-y-auto rounded-3xl p-0 sm:max-w-2xl">
+          {selected && (
+            <>
+              <img
+                src={selected.image || AboutHero}
+                alt={selected.title}
+                width={1280}
+                height={832}
+                className="aspect-[16/9] w-full object-cover"
+              />
+              <div className="flex flex-col gap-4 p-6 sm:p-8">
+                <span className="text-primary text-xs font-bold tracking-widest uppercase">
+                  {selected.category}
+                </span>
+                <DialogTitle className="font-display text-2xl font-bold sm:text-3xl">
+                  {selected.title}
+                </DialogTitle>
+                <DialogDescription className="text-muted-foreground text-base whitespace-pre-line">
+                  {selected.details}
+                </DialogDescription>
+                {selected.stack?.length > 0 && (
+                  <div className="flex flex-wrap gap-2">
+                    {selected.stack.map((t) => (
+                      <Badge key={t} variant="secondary" className="rounded-full px-3 py-1">
+                        {t}
+                      </Badge>
+                    ))}
+                  </div>
+                )}
+                {(selected.demo || selected.github) && (
+                  <div className="flex flex-col gap-3 pt-2 sm:flex-row">
+                    {selected.demo && (
+                      <Button variant="hero" size="xl" asChild>
+                        <a href={selected.demo} target="_blank" rel="noreferrer">
+                          <ExternalLink /> Live demo
+                        </a>
+                      </Button>
+                    )}
+                    {selected.github && (
+                      <Button variant="glass" size="xl" asChild>
+                        <a href={selected.github} target="_blank" rel="noreferrer">
+                          <Github /> GitHub
+                        </a>
+                      </Button>
+                    )}
+                  </div>
+                )}
+              </div>
+            </>
+          )}
+        </DialogContent>
+      </Dialog>
     </Section>
   );
 }
