@@ -47,13 +47,36 @@ export function calculateProjectEstimate(
   complexity: 'mvp' | 'growth' | 'enterprise' = 'growth',
   urgency: 'standard' | 'accelerated' = 'standard'
 ): EstimateResult {
-  const serviceRates: Record<string, { base: number; weeks: number; name: string }> = {
-    web: { base: 6500, weeks: 4, name: 'Web & App Architecture' },
-    cyber: { base: 8500, weeks: 3, name: 'Cybersecurity & Pentesting' },
-    design: { base: 4500, weeks: 3, name: 'Brand & UI/UX Systems' },
-    seo: { base: 3500, weeks: 4, name: 'SEO & Technical Growth' },
-    marketing: { base: 4000, weeks: 4, name: 'Social & Performance Ads' },
-  };
+  const serviceRates: Record<
+  string,
+  { base: number; weeks: number; name: string }
+> = {
+  web: {
+    base: 19999,
+    weeks: 4,
+    name: "Web & App Development",
+  },
+  cyber: {
+    base: 19999,
+    weeks: 2,
+    name: "Cybersecurity & Pentesting",
+  },
+  design: {
+    base: 7999,
+    weeks: 2,
+    name: "Branding & UI/UX Design",
+  },
+  seo: {
+    base: 14999,
+    weeks: 4,
+    name: "SEO & Technical Growth",
+  },
+  marketing: {
+    base: 12999,
+    weeks: 4,
+    name: "Social & Performance Marketing",
+  },
+};
 
   const complexityMultipliers = {
     mvp: 0.8,

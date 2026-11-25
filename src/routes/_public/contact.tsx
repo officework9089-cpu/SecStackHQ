@@ -29,7 +29,7 @@ const empty: ContactInput = { name: "", email: "", subject: "", company: "", ser
 function ContactsPage() {
   const [values, setValues] = useState<ContactInput>(empty);
   const [errors, setErrors] = useState<Errors>({});
-  const [selectedServices, setSelectedServices] = useState<string[]>(["web", "cyber"]);
+  const [selectedServices, setSelectedServices] = useState<string[]>([ "design","web" ]);
   const [complexity, setComplexity] = useState<"mvp" | "growth" | "enterprise">("growth");
   const [status, setStatus] = useState<"idle" | "loading" | "success">("idle");
   const [sent, setSent] = useState<ContactInput | null>(null);
@@ -201,11 +201,11 @@ function ContactsPage() {
                   </label>
                   <div className="grid grid-cols-1 gap-2">
                     {[
-                      { id: "web", label: "Web & App Architecture", base: "6,500" },
-                      { id: "cyber", label: "Cybersecurity & Pentesting", base: "8,500" },
-                      { id: "design", label: "UI/UX & Brand Systems", base: "4,500" },
-                      { id: "seo", label: "Technical SEO Dominance", base: "3,500" },
-                      { id: "marketing", label: "Paid Ads & Performance Growth", base: "4,000" },
+                      { id: "design", label: "UI/UX & Brand Systems", base: "7,999" },
+                      { id: "web", label: "Web Architecture", base: "19,999" },
+                      { id: "cyber", label: "Cybersecurity & Pentesting", base: "19,999" },
+                      { id: "seo", label: "Technical SEO Dominance", base: "14,999" },
+                      { id: "marketing", label: "Paid Ads & Performance Growth", base: "12,999" },
                     ].map((item) => {
                       const selected = selectedServices.includes(item.id);
                       return (
@@ -225,7 +225,7 @@ function ContactsPage() {
                             </span>
                             <span>{item.label}</span>
                           </div>
-                          <span className="font-mono text-[11px]">${item.base}</span>
+                          <span className="font-mono text-[11px]">Rs.{item.base}</span>
                         </button>
                       );
                     })}
@@ -262,7 +262,7 @@ function ContactsPage() {
                       Estimated Investment:
                     </span>
                     <span className="text-xl font-extrabold font-mono text-cyan-600 tabular-nums dark:text-cyan-400 sm:text-2xl">
-                      ${estimate.baseCost.toLocaleString()}
+                      Rs.{estimate.baseCost.toLocaleString()}
                     </span>
                   </div>
 
@@ -279,7 +279,7 @@ function ContactsPage() {
                         <div key={i} className="flex justify-between">
                           <span className="truncate pr-2">{b.item}</span>
                           <span className="font-mono tabular-nums">
-                            {b.cost < 0 ? `-$${Math.abs(b.cost).toLocaleString()}` : `$${b.cost.toLocaleString()}`}
+                            {b.cost < 0 ? `-Rs.${Math.abs(b.cost).toLocaleString()}` : `Rs.${b.cost.toLocaleString()}`}
                           </span>
                         </div>
                       ))}

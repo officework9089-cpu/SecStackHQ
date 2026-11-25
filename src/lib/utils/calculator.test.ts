@@ -9,7 +9,7 @@ test('validateContactForm passes valid inputs', () => {
     workEmail: 'jane@enterprise.com',
     company: 'FinTech Secure Labs',
     service: 'cyber',
-    budgetRange: '$15k-$30k',
+    budgetRange: 'Rs.15k-Rs.30k',
     timeline: '1-2 months',
     message: 'We require a comprehensive penetration test and web application architecture review.',
   };
