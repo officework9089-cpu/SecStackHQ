@@ -1,4 +1,4 @@
-@import "tailwindcss" source(none);
+@import "tailwindcss";
 @source "../src";
 @import "tw-animate-css";
 
@@ -385,4 +385,67 @@
 
 .animate-marquee:hover {
   animation-play-state: paused;
+}
+
+
+/* Mobile rendering optimizations */
+@media (max-width: 640px) {
+  .glass {
+    backdrop-filter: blur(8px) saturate(120%);
+    -webkit-backdrop-filter: blur(8px) saturate(120%);
+  }
+
+  .border-glow::before {
+    animation: none;
+    opacity: 0.3;
+  }
+
+  .shadow-glow-lg {
+    box-shadow: 0 8px 24px -12px
+      color-mix(in oklab, var(--brand-blue) 35%, transparent);
+  }
+}
+
+/* Reduce expensive hover effects on touch devices */
+@media (hover: none) and (pointer: coarse) {
+  .border-glow::before {
+    animation: none;
+  }
+
+  .animate-marquee:hover {
+    animation-play-state: running;
+  }
+}
+
+/* Accessibility: respect reduced motion */
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+
+
+@font-face {
+  font-family: "Manrope";
+  src: url("/fonts/manrope-variable.woff2") format("woff2");
+  font-style: normal;
+  font-weight: 200 800;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "Sora";
+  src: url("/fonts/sora-variable.woff2") format("woff2");
+  font-style: normal;
+  font-weight: 100 800;
+  font-display: swap;
 }

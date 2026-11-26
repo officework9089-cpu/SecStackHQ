@@ -43,13 +43,13 @@ export function MobileBottomNav() {
   };
 
   return (
-    <div className="pointer-events-none fixed inset-x-0 bottom-4 z-[60] flex justify-center px-3 lg:hidden">
+    <div className="pointer-events-none fixed inset-x-0 bottom-4 z-60 flex justify-center px-3 lg:hidden">
       <BottomNavigation
         value={currentActive}
         onValueChange={go}
         scrollBehavior="none"
         aria-label="Mobile navigation"
-        className="pointer-events-auto flex w-full max-w-[420px] items-center justify-center"
+        className="pointer-events-auto flex w-full max-w-105 items-center justify-center"
       >
         <BottomNavigationHighlight className="absolute inset-x-0 inset-y-1 z-0 rounded-full bg-muted">
           <ul className="flex w-full items-center justify-around rounded-full border border-border/60 bg-background/90 px-1 py-1 shadow-xl shadow-black/10 backdrop-blur-xl">
@@ -63,7 +63,7 @@ export function MobileBottomNav() {
                       aria-current={
                         currentActive === value ? "page" : undefined
                       }
-                      className="relative z-10 flex h-[3.75rem] w-full flex-col items-center justify-center gap-1 rounded-full text-muted-foreground outline-none transition-colors hover:text-foreground focus-visible:ring-2 focus-visible:ring-primary data-[state=active]:text-primary"
+                      className="relative z-10 flex h-15 w-full flex-col items-center justify-center gap-1 rounded-full text-muted-foreground outline-none transition-colors hover:text-foreground focus-visible:ring-2 focus-visible:ring-primary"
                     >
                       <Icon
                         size={21}

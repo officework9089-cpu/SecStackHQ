@@ -39,30 +39,40 @@ export function Projects() {
   const [loading, setLoading] = useState(true);
   const [selected, setSelected] = useState<FeaturedProject | null>(null);
 
-  useEffect(() => {
-    let active = true;
+  
+useEffect(() => {
+  let active = true;
 
-    async function loadFeaturedProjects() {
-      setLoading(true);
-      const { data, error } = await supabase
-        .from("projects")
-        .select("id, title, category, summary, details, image, stack, demo, github")
-        .eq("status", "Published");
+  async function loadFeaturedProjects() {
+    const { data, error } = await supabase
+      .from("projects")
+      .select(
+        "id, title, category, summary, details, image, stack, demo, github"
+      )
+      .eq("status", "Published")
+      .limit(3);
 
-      if (!active) return;
+    if (!active) return;
 
-      if (!error && data) {
-        const shuffled = shuffleArray(data as FeaturedProject[]);
-        setFeaturedProjects(shuffled.slice(0, 3));
-      }
-      setLoading(false);
+    if (error) {
+      console.error("Featured projects error:", error);
+      setFeaturedProjects([]);
+    } else {
+      setFeaturedProjects(
+        (data ?? []) as FeaturedProject[]
+      );
     }
 
-    loadFeaturedProjects();
-    return () => {
-      active = false;
-    };
-  }, []);
+    setLoading(false);
+  }
+
+  loadFeaturedProjects();
+
+  return () => {
+    active = false;
+  };
+}, []);
+
 
   return (
     <Section id="projects">

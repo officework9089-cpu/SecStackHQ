@@ -89,14 +89,44 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary_large_image" },
       { name: "theme-color", content: "#2f6bff" },
+
+      {
+        property: "og:title",
+        content: "SecStackHQ — Develop. Secure. Grow.",
+      },
+      {
+        property: "og:description",
+        content:
+          "Professional web development, cybersecurity, branding and digital growth solutions by SecStackHQ.",
+      },
+      {
+        property: "og:image",
+        content: "https://www.secstackhq.com/og-image.webp",
+      },
+      {
+        property: "og:image:width",
+        content: "1200",
+      },
+      {
+        property: "og:image:height",
+        content: "630",
+      },
+      {
+        name: "twitter:title",
+        content: "SecStackHQ — Develop. Secure. Grow.",
+      },
+      {
+        name: "twitter:description",
+        content:
+          "Build, secure and grow your digital business with SecStackHQ.",
+      },
+      {
+        name: "twitter:image",
+        content: "https://www.secstackhq.com/og-image.webp",
+      },
+
     ],
     links: [
-      { rel: "preconnect", href: "https://fonts.googleapis.com" },
-      { rel: "preconnect", href: "https://fonts.gstatic.com", crossOrigin: "anonymous" },
-      {
-        rel: "stylesheet",
-        href: "https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&family=Sora:wght@400;600;700;800&display=swap",
-      },
       {
         rel: "stylesheet",
         href: appCss,
