@@ -3,8 +3,8 @@ import { motion, AnimatePresence, useReducedMotion } from "motion/react";
 import { ArrowRight, ChevronDown, Play } from "lucide-react";
 import { useEffect, useState } from "react";
 
-import heroLight from "@/assets/Bg_Secstack.AVIF";
-import heroDark from "@/assets/Bd_Sectsack_dark.AVIF";
+import heroLight from "@/assets/Bg_Secstack.jpg";
+import heroDark from "@/assets/Bd_Sectsack_dark.jpg";
 
 import { Particles } from "@/components/common/BackgroundFX";
 import { AnimatedText, MagneticButton } from "@/components/motion";
